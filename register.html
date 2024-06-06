@@ -16,23 +16,48 @@
                 <label for="inputEmail" class="col-sm-3 col-form-label text-bg-light">Email</label>
                 <input type="email" class="form-control bg-secondary text-bg-dark" id="inputEmail" placeholder="name@example.com">
                 <label for="inputDateOfBirth" class="col-sm-3 col-form label text-bg-light">Date of birth</label>
-                <input type="date" class="form-control bg-secondary text-bg-dark" id="birthday" name="birthday">
+                <input type="date" class="form-control bg-secondary text-bg-dark" id="inputDateOfBirth" name="birthday">
                 <label for="inputGender" class="col-sm-3 col-form label text-bg-light">Gender</label>
                 <select class="form-select bg-secondary text-bg-dark" id="inputGender">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
-                <label for="inputPassword" class="col-sm-3 col-form label text-bg-light">Plan type</label>
+                <label for="inputPlanType" class="col-sm-3 col-form label text-bg-light">Plan type</label>
                 <select class="form-select bg-secondary text-bg-dark" id="inputPlanType">
                     <option value="basic">Basic</option>
                     <option value="pro">Pro</option>
                     <option value="enterprise">Enterprise</option>
                 </select>
-
-                
+                <button onclick="registerUser()" class="btn btn-lg btn-primary rounded-3 mt-3 p-3 mb-1" id="btnRegister" type="submit">Register</button>                
             </div>
         </div>
+        <script>
+         
+            function registerUser() {
+                const userName = document.getElementById("inputUsername").value;
+                const password = document.getElementById("inputPassword").value;
+                const email = document.getElementById("inputEmail").value;
+                const dateOfBirth = document.getElementById("inputDateOfBirth").value;
+                const gender = document.getElementById("inputGender").value;
+                const planType = document.getElementById("inputPlanType").value;
 
+                const userObj = {
+                    userName: userName,
+                    password: password,
+                    email: email,
+                    dateOfBirth: dateOfBirth,
+                    gender: gender,
+                    planType: planType
+                };
+
+                for (let userProp in userObj) {
+                    console.log(userProp + ": " + userObj[userProp]);
+                }
+
+        localStorage.setItem('user', JSON.stringify(userObj));
+             }
+
+        </script>
     </body>
 </html>
