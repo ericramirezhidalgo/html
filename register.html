@@ -25,25 +25,22 @@
                 </select>
                 <label for="inputPlanType" class="col-sm-3 col-form label text-bg-light">Plan type</label>
                 <select class="form-select bg-secondary text-bg-dark" id="inputPlanType">
-                    <option value="basic">Basic</option>
-                    <option value="pro">Pro</option>
-                    <option value="enterprise">Enterprise</option>
+                    <option value="Basic">Basic</option>
+                    <option value="Pro">Pro</option>
+                    <option value="Enterprise">Enterprise</option>
                 </select>
                 <button onclick="registerUser()" class="btn btn-lg btn-primary rounded-3 mt-3 p-3 mb-1" id="btnRegister" type="submit">Register</button>                
             </div>
         </div>
         <script>
          
-            function registerUser() {
+         function registerUser() {
             const userName = document.getElementById("inputUsername").value;
             const password = document.getElementById("inputPassword").value;
             const email = document.getElementById("inputEmail").value;
             const dateOfBirth = document.getElementById("inputDateOfBirth").value;
             const gender = document.getElementById("inputGender").value;
             const planType = document.getElementById("inputPlanType").value;
-
-            const storedUserData = localStorage.getItem('user');
-            const existingUsers = storedUserData ? JSON.parse(storedUserData) : [];
 
             const userObj = {
                 userName: userName,
@@ -54,10 +51,19 @@
                 planType: planType
             };
 
-            existingUsers.push(userObj);
+            const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
 
-            localStorage.setItem('user', JSON.stringify(existingUsers));
-    }
+            storedUsers.push(userObj);
+
+            localStorage.setItem('Users', JSON.stringify(storedUsers));
+
+            document.getElementById("inputUsername").value = "";
+            document.getElementById("inputPassword").value = "";
+            document.getElementById("inputEmail").value = "";
+            document.getElementById("inputDateOfBirth").value = "";
+            document.getElementById("inputGender").value = "";
+            document.getElementById("inputPlanType").value = "";
+        }
 
 
         </script>

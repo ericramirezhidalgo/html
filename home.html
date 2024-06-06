@@ -19,15 +19,14 @@
     </div>
     <script>
         function showUser() {
-            const storedUserData = localStorage.getItem('user');
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-            if (storedUserData) {
-                const userData = JSON.parse(storedUserData);
-                document.getElementById('user').textContent = `Username: ${userData.userName}`;
-                document.getElementById('email').textContent = `Email: ${userData.email}`;
-                document.getElementById('dateOfBirth').textContent = `Date of Birth: ${userData.dateOfBirth}`;
-                document.getElementById('gender').textContent = `Gender: ${userData.gender}`;
-                document.getElementById('planType').textContent = `Plan Type: ${userData.planType}`;
+            if (loggedInUser) {
+                document.getElementById('user').textContent = `Username: ${loggedInUser.userName}`;
+                document.getElementById('email').textContent = `Email: ${loggedInUser.email}`;
+                document.getElementById('dateOfBirth').textContent = `Date of Birth: ${loggedInUser.dateOfBirth}`;
+                document.getElementById('gender').textContent = `Gender: ${loggedInUser.gender}`;
+                document.getElementById('planType').textContent = `Plan Type: ${loggedInUser.planType}`;
                 document.getElementById('userPassword').textContent = 'Password: ********';
             } else {
                 console.log('User data not found in local storage');
