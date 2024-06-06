@@ -35,28 +35,30 @@
         <script>
          
             function registerUser() {
-                const userName = document.getElementById("inputUsername").value;
-                const password = document.getElementById("inputPassword").value;
-                const email = document.getElementById("inputEmail").value;
-                const dateOfBirth = document.getElementById("inputDateOfBirth").value;
-                const gender = document.getElementById("inputGender").value;
-                const planType = document.getElementById("inputPlanType").value;
+            const userName = document.getElementById("inputUsername").value;
+            const password = document.getElementById("inputPassword").value;
+            const email = document.getElementById("inputEmail").value;
+            const dateOfBirth = document.getElementById("inputDateOfBirth").value;
+            const gender = document.getElementById("inputGender").value;
+            const planType = document.getElementById("inputPlanType").value;
 
-                const userObj = {
-                    userName: userName,
-                    password: password,
-                    email: email,
-                    dateOfBirth: dateOfBirth,
-                    gender: gender,
-                    planType: planType
-                };
+            const storedUserData = localStorage.getItem('user');
+            const existingUsers = storedUserData ? JSON.parse(storedUserData) : [];
 
-                for (let userProp in userObj) {
-                    console.log(userProp + ": " + userObj[userProp]);
-                }
+            const userObj = {
+                userName: userName,
+                password: password,
+                email: email,
+                dateOfBirth: dateOfBirth,
+                gender: gender,
+                planType: planType
+            };
 
-        localStorage.setItem('user', JSON.stringify(userObj));
-             }
+            existingUsers.push(userObj);
+
+            localStorage.setItem('user', JSON.stringify(existingUsers));
+    }
+
 
         </script>
     </body>
