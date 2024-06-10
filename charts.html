@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Charts</title>
+        <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart-extras.js" type="text/javascript"></script>
+    </head>
+    <body onload="draw(), drawAreaCanvas()" class="bg-gray-800">
+        <main>
+            <div class="container mx-auto  w-3/4 m-2 p-5 rounded-lg">
+                <div class="flex justify-center">
+                    <div class="w-1/2 bg-white mt-3 p-2 text-gray-800 rounded-lg flex flex-col">
+                        <p class="text-4xl font-bold text-center">Charts</p>
+                    </div>
+                </div>
+            </div>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from JSON</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="canvas" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from XML</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="pieXML" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bar chart</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="barChart" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Area canvas</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="areaChart" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bubble chart</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="bubbleChart" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <textarea id="json" style="display:none;">
+                {
+                    "values": [123, 456, 789, 902],
+                    "labels": ["Facebook", "Twitter", "Google+", "Twitch"]
+                }
+            </textarea>
+            <textarea id="barJson" style="display:none;">
+                {
+                    "values": [1.80, 1.99, 1.05, 1.75],
+                    "labels": ["Italy", "Norway", "India", "France"]
+                }
+            </textarea>
+            <textarea id="xml" rows="4" cols="2" style="display:none;">
+                <series name="Followers" color="Blue" metric="Quantity">
+                    <point name="Facebook" value="623"/>
+                    <point name="Twitter" value="156"/>
+                    <point name="Google+" value="389"/>
+                    <point name="Twitch" value="822"/>
+                </series>
+            </textarea>
+        </main>
+        <script type="text/javascript">
+       function draw() {
+    const barChart = new Tee.Chart("barChart");
+    const xmlChart = new Tee.Chart("pieXML");
+    const chart = new Tee.Chart("canvas");
+    const bubbleChart = new Tee.Chart("bubbleChart");
+
+    const bubble = new Tee.Bubble();
+    const bubbleSeries = bubbleChart.addSeries(bubble);
+
+    bubbleSeries.data.values=[931,12,49,83,101];
+    bubbleSeries.data.labels=["Spain", "Italy", "Norway", "France","Portugal"];
+    bubbleSeries.data.radius=[101,50,100,90,150];
+
+    const barSeries = barChart.addSeries(new Tee.Bar());
+    const pieSeries = chart.addSeries(new Tee.Pie());
+
+    const parseJsonData = (elementId) => {
+        const jsonData = document.getElementById(elementId).value;
+        return JSON.parse(jsonData);
+    };
+
+    const barjsonData = parseJsonData("barJson");
+    const jsonData = parseJsonData("json");
+
+    const xmlData = document.getElementById("xml").value;
+
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlData,"text/xml");
+    const xmlSeries = xmlDoc.getElementsByTagName("series")[0];
+    const points = xmlSeries.getElementsByTagName("point");
+
+    const xmlValues = [];
+    const xmlLabels = [];
+    for (var i = 0; i < points.length; i++) {
+        xmlLabels.push(points[i].getAttribute("name"));
+        xmlValues.push(parseInt(points[i].getAttribute("value")));
+    }
+
+    barSeries.data.values = barjsonData.values;
+    barSeries.data.labels = barjsonData.labels;
+    const xmlPieSeries = xmlChart.addSeries(new Tee.Pie());
+    xmlPieSeries.data.values = xmlValues;
+    xmlPieSeries.data.labels = xmlLabels;
+
+    pieSeries.data.values = jsonData.values;
+    pieSeries.data.labels = jsonData.labels;
+
+    bubble.title.text="Bubble";
+    bubbleChart.applyTheme("minimal");
+    bubbleChart.draw();
+
+    barChart.title.text = "Average heights by country";
+    xmlChart.title.text = "Data from XML";
+
+    chart.title.text = "Data from JSON";
+    chart.title.visible = true;
+
+    barChart.applyTheme("minimal");
+    barChart.draw();
+    xmlChart.applyTheme("minimal");
+    xmlChart.draw();
+
+    chart.applyTheme("minimal");
+    chart.draw();               
+}
+
+        function drawAreaCanvas() {
+            Chart1=new Tee.Chart("areaChart");
+        
+            Chart1.panel.margins.top = 12;
+
+            const countries = ['Spain', 'Italy', 'Norway', 'France']
+            const area = new Tee.Donut();
+            area.title = "Cat population";
+            area.format.fill = "rgba(187, 55, 25)";
+            const range = 11;
+            area.data.values[0] = Math.random() * range + 5;
+            area.data.labels[0] = "Israel";
+            
+
+    for(let i= 1 ; i < countries.length; i++)
+    {
+        let avl  = area.data.values[i-1] + (Math.random()*range) - (range*0.5);
+        
+        if(avl < 0)
+        {
+            avl *= -1;
+        }
+        if(avl > 100)
+        {
+            avl -=20;
+        }
+        area.data.values[i] = avl;
+        area.data.labels[i] = countries[i];
+    }		   
+    Chart1.addSeries(area); //.pointer.visible=true;
+    //config some series appearance characteristics
+    Chart1.series.items[0].format.stroke.fill = Chart1.series.items[0].format.fill;
+    Chart1.series.items[0].format.stroke.size = 2;
+    Chart1.series.items[0].format.shadow.visible=false;
+    Chart1.series.items[0].format.transparency=0.12;
+    Chart1.series.items[0].smooth=0.1;
+    Chart1.series.items[0].hover = false;
+
+
+    //Axes
+    Chart1.axes.left.title.text="$ 000s";
+    Chart1.axes.left.title.visible=false;
+    Chart1.axes.left.labels.roundFirst=true;
+    Chart1.axes.bottom.labels.roundFirst=true;
+    Chart1.axes.bottom.title.text="Labels";
+    Chart1.axes.bottom.title.format.font.fill = "rgba(0,0,0,0.6)";
+    Chart1.axes.bottom.title.format.font.setSize(14);
+    Chart1.axes.bottom.labels.dateFormat = "mm/yy";
+    Chart1.axes.left.increment=20;
+    Chart1.axes.left.setMinMax(0, 50);
+    Chart1.axes.left.grid.format.stroke.size = 1;
+    Chart1.axes.left.ticks.visible=false;
+    Chart1.axes.left.format.stroke.fill = "rgba(0,0,0,0.0)";
+    Chart1.axes.bottom.format.stroke.size = 1;
+
+    //Title
+    Chart1.title.visible = false;
+
+
+// annotation (alternative title)
+a1=new Tee.Annotation(Chart1);
+a1.format.fill = "rgba(0,0,0,0.0)";
+a1.format.stroke.fill="rgba(0,0,0,0.0)";
+a1.format.font.style="20px Tahoma";
+a1.format.font.fill = "rgba(0,0,0,0.6)";
+a1.text="Sorting area";
+
+Chart1.draw();  //get positions
+a1.position.x = Chart1.axes.bottom.calc(Chart1.axes.bottom.minimum);
+a1.position.y = 8;
+Chart1.tools.add(a1);
+
+//tooltip
+tip=new Tee.ToolTip(Chart1);
+tip.render="dom";
+tip.domStyle = "padding-left:8px; padding-right:8px; padding-top:0px; padding-bottom:4px; margin-left:5px; margin-top:0px; ";
+tip.domStyle = tip.domStyle + "background-color:#FCFCFC; border-radius:4px 4px; color:#FFF; ";
+tip.domStyle = tip.domStyle + "border-style:solid;border-color:#A3A3AF;border-width:1px; z-index:1000;";
+
+tip.pointer.visible = true;
+tip.pointer.fill = "rgb(30,80,100)";
+tip.pointer.firstCircleRadius = 4;
+tip.pointer.secondCircleRadius = 8;
+tip.pointer.firstCircleOpacity = 1;
+tip.pointer.secondCircleOpacity = 0.5;
+tip.pointer.animationVisible = true;
+tip.pointer.animationDuration = 500;
+Chart1.tools.add(tip);
+
+tip.onhide=function() { scaling=0; poindex=-1; }
+
+tip.onshow=function(tool,series,index) {
+    if (enableCursor == false){
+        Chart1.tools.add(t);
+        enableCursor = true;
+        Chart1.draw();
+    }
+}		  
+
+tip.ongettext=function(tool, text, series, index) {
+    var t, s="", ser;
+
+    for(t=0;t<Chart1.series.count(); t++) {
+    if (t>0) s+="<br/>";
+    ser=Chart1.series.items[t];
+    s+='<font face="verdana" color="darkorange" size="1"><b>'+ser.title+':</b></font> <font face="verdana" color="red" size="1">'+ser.data.values[index].toFixed(2)+' cats</font>';
+    }
+    return s;
+}
+
+
+//animation
+animation=new Tee.SeriesAnimation();
+animation.duration=1700;
+animation.kind="all";
+animation.mode = "linear"; 
+
+animation.animate(Chart1);
+
+
+Chart1.draw();
+Chart1.applyTheme("minimal")
+
+}
+
+        </script>
+        
+        
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+    </body>
+</html>
