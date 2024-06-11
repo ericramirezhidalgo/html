@@ -16,72 +16,10 @@
                 </div>
                 <div id="buttonContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2">
                 </div>
+                <div id="sectionContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2">
+                </div>
             </div>
-
-            <section id="section-canvas" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from JSON</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="canvas" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-pieXML" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from XML</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="pieXML" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-barChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bar chart</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="barChart" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-areaChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Area chart</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="areaChart" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-bubbleChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bubble chart</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="bubbleChart" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-donutChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Donut</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="donutChart" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-multiDonutChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Multi donut</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="multiDonutChart" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <section id="section-dynamic" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Dynamic area</label>
-                <div class="flex justify-center m-5">
-                    <canvas id="dynamicLineChart" width="800" height="300">
-                        This browser does not seem to support HTML5 Canvas.
-                    </canvas>
-                </div>
-            </section>
+          
             <textarea id="json" style="display:none;">
                 {
                     "values": [123, 456, 789, 902],
@@ -103,6 +41,43 @@
                 </series>
             </textarea>
         </main>
+        <script>
+            const sections = [
+                ['canvas', 'Pie chart from JSON'],
+                ['pieXML', 'Pie chart from XML'],
+                ['barChart', 'Bar chart'],
+                ['areaChart', 'Area chart'],
+                ['bubbleChart', 'Bubble chart'],
+                ['donutChart', 'Donut chart'],
+                ['multiDonutChart', 'Multi donut chart'],
+                ['dynamic', 'Dynamic area']
+            ];
+            const sectionContainer = document.getElementById('sectionContainer');
+    
+            sections.forEach(([id, label]) => {
+                const section = document.createElement('section');
+                section.id = `section-${id}`;
+                section.style.display = 'none';
+                section.className = 'flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5';
+    
+                const labelElement = document.createElement('label');
+                labelElement.className = 'w-2/5 m-3 p-1 text-3xl text-center font-bold';
+                labelElement.textContent = label;
+                section.appendChild(labelElement);
+    
+                const div = document.createElement('div');
+                div.className = 'flex justify-center m-5';
+                const canvas = document.createElement('canvas');
+                canvas.id = id;
+                canvas.width = '800';
+                canvas.height = '300';
+                canvas.textContent = 'This browser does not seem to support HTML5 Canvas.';
+                div.appendChild(canvas);
+                section.appendChild(div);
+    
+                sectionContainer.appendChild(section);
+            });
+        </script>
     <script>
         const charts = [
             ['canvas', 'Pie chart from JSON'],
