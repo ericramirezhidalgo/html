@@ -259,6 +259,7 @@ function setConcentric(chart, value) {
         const countries = ['Spain', 'Italy', 'Norway', 'France']
         const area = new Tee.Area();
         area.title = "Cat population";
+        Chart1.footer.text = "Cats";
         area.format.fill = "rgba(187, 55, 25)";
         const range = 11;
         area.data.values[0] = Math.random() * range + 5;
@@ -295,8 +296,6 @@ function setConcentric(chart, value) {
     Chart1.axes.left.title.visible=false;
     Chart1.axes.left.labels.roundFirst=true;
     Chart1.axes.bottom.labels.roundFirst=true;
-    Chart1.axes.bottom.title.text="Labels";
-    Chart1.axes.bottom.title.format.font.fill = "rgba(0,0,0,0.6)";
     Chart1.axes.bottom.title.format.font.setSize(14);
     Chart1.axes.bottom.labels.dateFormat = "mm/yy";
     Chart1.axes.left.increment=20;
