@@ -6,7 +6,7 @@
         <title>Charts</title>
         <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart-extras.js" type="text/javascript"></script>
     </head>
-    <body onload="draw(), drawAreaCanvas()" class="bg-gray-800">
+    <body onload="draw(), drawAreaCanvas(), drawDonut()" class="bg-gray-800">
         <main>
             <div class="container mx-auto  w-3/4 m-2 p-5 rounded-lg">
                 <div class="flex justify-center">
@@ -40,7 +40,7 @@
                 </div>
             </section>
             <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
-                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Area canvas</label>
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Area chart</label>
                 <div class="flex justify-center m-5">
                     <canvas id="areaChart" width="800" height="300">
                         This browser does not seem to support HTML5 Canvas.
@@ -51,6 +51,22 @@
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bubble chart</label>
                 <div class="flex justify-center m-5">
                     <canvas id="bubbleChart" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Donut</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="donutChart" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Multi donut</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="multiDonutChart" width="800" height="300">
                         This browser does not seem to support HTML5 Canvas.
                     </canvas>
                 </div>
@@ -77,7 +93,99 @@
             </textarea>
         </main>
         <script type="text/javascript">
-       function draw() {
+function drawDonut()
+{
+    //multidonut
+    const multiDonutChart = new Tee.Chart("multiDonutChart");
+
+    multiDonutChart.addSeries(new Tee.Donut([56,12,8,34], ["Ita","Spa","Nor","Fra"]));
+    multiDonutChart.addSeries(new Tee.Donut([36,152,28,14], ["Por", "USA","Can","Mex"]));
+    multiDonutChart.addSeries(new Tee.Donut([73,89], ["Chi","Ind"]));
+    multiDonutChart.title.text="Games per person";
+    multiDonutChart.series.each(function(s) { s.marks.visible=false; });
+
+    multiDonutChart.legend.legendStyle="values";
+
+    setConcentric(multiDonutChart, true);
+
+    multiDonutChart.applyTheme("minimal");
+    multiDonutChart.draw();
+
+    //donut
+    const donutChart = new Tee.Chart("donutChart");
+
+    const donut = new Tee.Donut();
+
+    const donutSeries = donutChart.addSeries(donut);
+
+    donutSeries.data.values=[40,22,39,29];
+    donutSeries.data.labels=["Fire", "Water", "Wind", "Earth"];
+    donut.angleWidth = 360;
+    donut.rotation = 0;
+    donutChart.title.text ="Natural elements";
+    donutChart.title.format.font.style= "18px Verdana";
+    donutChart.series.items[0].format.stroke.fill="darkgrey";
+    donutChart.series.items[0].marks.style="percentlabel";
+
+    donutChart.ondraw=function() {
+
+    //Custom labels
+    donutChart.ctx.textAlign="start";
+
+    const r = donut.getCenter(donutChart.ctx);
+
+    // Calculate average
+    const sum = donutSeries.data.values.reduce((a, b) => a + b, 0);
+    const avg = (sum / donutSeries.data.values.length).toFixed(2);
+
+    //Centre text part 1
+    donutChart.ctx.font="28px Arial";
+    donutChart.ctx.fillStyle = "#000000";
+    donutChart.ctx.fillText(avg,donutChart.ctx.x-(donut.format.textWidth(avg)/2),donutChart.ctx.y+110);
+
+    //Centre text part 2
+    donutChart.ctx.font="12px Verdana";
+    donutChart.ctx.fillStyle = "#888888";
+    donutChart.ctx.fillText("average",donutChart.ctx.x-(donut.format.textWidth("average")/2)+70,donutChart.ctx.y+115);
+
+    //end labels
+    //y height:
+    var yPosLabel = donutChart.ctx.y + 10;
+    //font:
+    donutChart.ctx.font="12px Verdana";
+
+    }
+
+    donutChart.applyTheme("minimal");
+    donutChart.draw();
+    animation=new Tee.SeriesAnimation();
+    animation.duration=1700;
+    animation.kind="each";
+    animation.mode = "exponential";
+    animation.fade = "int-out";
+
+    animation.animate(donutChart);
+
+}
+
+function setConcentric(chart, value) {
+    if (value) {
+        var li=chart.series.items, l=li.length, index=0, don=100/(l+1), t;
+        for(t=0; t<l; t++) {
+        li[t].concentric=value;
+
+        if (li[t].visible) {
+            li[t].donut=don + (index*don);
+            index++;
+        }
+        }
+    }
+    else
+        chart.series.each(function(s) { s.donut=50; s.concentric=false; });
+}
+
+
+    function draw() {
     const barChart = new Tee.Chart("barChart");
     const xmlChart = new Tee.Chart("pieXML");
     const chart = new Tee.Chart("canvas");
@@ -143,19 +251,19 @@
     chart.draw();               
 }
 
-        function drawAreaCanvas() {
-            Chart1=new Tee.Chart("areaChart");
-        
-            Chart1.panel.margins.top = 12;
+    function drawAreaCanvas() {
+        Chart1=new Tee.Chart("areaChart");
+    
+        Chart1.panel.margins.top = 12;
 
-            const countries = ['Spain', 'Italy', 'Norway', 'France']
-            const area = new Tee.Donut();
-            area.title = "Cat population";
-            area.format.fill = "rgba(187, 55, 25)";
-            const range = 11;
-            area.data.values[0] = Math.random() * range + 5;
-            area.data.labels[0] = "Israel";
-            
+        const countries = ['Spain', 'Italy', 'Norway', 'France']
+        const area = new Tee.Donut();
+        area.title = "Cat population";
+        area.format.fill = "rgba(187, 55, 25)";
+        const range = 11;
+        area.data.values[0] = Math.random() * range + 5;
+        area.data.labels[0] = "Israel";
+        
 
     for(let i= 1 ; i < countries.length; i++)
     {
