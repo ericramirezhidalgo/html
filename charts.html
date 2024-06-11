@@ -1,84 +1,81 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart.js" type="text/javascript"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Charts</title>
-        <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart-extras.js" type="text/javascript"></script>
-    </head>
-    <body onload="draw(), drawAreaCanvas(), drawDonut(), dynamicDraw()" class="bg-gray-800">
-        <main>
-            <div class="container mx-auto w-3/4 m-2 p-5 rounded-lg">
-                <div class="flex justify-center">
-                    <div class="w-1/2 bg-white mt-3 p-2 text-gray-800 rounded-lg flex flex-col">
-                        <p class="text-4xl font-bold text-center">Charts</p>
-                    </div>
-                </div>
-                <div id="buttonContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2">
-                </div>
-                <div id="sectionContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2">
+<head>
+    <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart.js" type="text/javascript"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charts</title>
+    <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart-extras.js" type="text/javascript"></script>
+</head>
+<body onload="initializeCharts()" class="bg-gray-800">
+    <main>
+        <div class="container mx-auto w-3/4 m-2 p-5 rounded-lg">
+            <div class="flex justify-center">
+                <div class="w-1/2 bg-white mt-3 p-2 text-gray-800 rounded-lg flex flex-col">
+                    <p class="text-4xl font-bold text-center">Charts</p>
                 </div>
             </div>
-          
-            <textarea id="json" style="display:none;">
-                {
-                    "values": [123, 456, 789, 902],
-                    "labels": ["Facebook", "Twitter", "Google+", "Twitch"]
-                }
-            </textarea>
-            <textarea id="barJson" style="display:none;">
-                {
-                    "values": [1.80, 1.99, 1.05, 1.75],
-                    "labels": ["Italy", "Norway", "India", "France"]
-                }
-            </textarea>
-            <textarea id="xml" rows="4" cols="2" style="display:none;">
-                <series name="Followers" color="Blue" metric="Quantity">
-                    <point name="Facebook" value="623"/>
-                    <point name="Twitter" value="156"/>
-                    <point name="Google+" value="389"/>
-                    <point name="Twitch" value="822"/>
-                </series>
-            </textarea>
-        </main>
-        <script>
-            const sections = [
-                ['canvas', 'Pie chart from JSON'],
-                ['pieXML', 'Pie chart from XML'],
-                ['barChart', 'Bar chart'],
-                ['areaChart', 'Area chart'],
-                ['bubbleChart', 'Bubble chart'],
-                ['donutChart', 'Donut chart'],
-                ['multiDonutChart', 'Multi donut chart'],
-                ['dynamic', 'Dynamic area']
-            ];
-            const sectionContainer = document.getElementById('sectionContainer');
-    
-            sections.forEach(([id, label]) => {
-                const section = document.createElement('section');
-                section.id = `section-${id}`;
-                section.style.display = 'none';
-                section.className = 'flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5';
-    
-                const labelElement = document.createElement('label');
-                labelElement.className = 'w-2/5 m-3 p-1 text-3xl text-center font-bold';
-                labelElement.textContent = label;
-                section.appendChild(labelElement);
-    
-                const div = document.createElement('div');
-                div.className = 'flex justify-center m-5';
-                const canvas = document.createElement('canvas');
-                canvas.id = id;
-                canvas.width = '800';
-                canvas.height = '300';
-                canvas.textContent = 'This browser does not seem to support HTML5 Canvas.';
-                div.appendChild(canvas);
-                section.appendChild(div);
-    
-                sectionContainer.appendChild(section);
-            });
-        </script>
+            <div id="buttonContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2"></div>
+            <div id="sectionContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2"></div>
+        </div>
+      
+        <textarea id="json" style="display:none;">
+            {
+                "values": [123, 456, 789, 902],
+                "labels": ["Facebook", "Twitter", "Google+", "Twitch"]
+            }
+        </textarea>
+        <textarea id="barJson" style="display:none;">
+            {
+                "values": [1.80, 1.99, 1.05, 1.75],
+                "labels": ["Italy", "Norway", "India", "France"]
+            }
+        </textarea>
+        <textarea id="xml" rows="4" cols="2" style="display:none;">
+            <series name="Followers" color="Blue" metric="Quantity">
+                <point name="Facebook" value="623"/>
+                <point name="Twitter" value="156"/>
+                <point name="Google+" value="389"/>
+                <point name="Twitch" value="822"/>
+            </series>
+        </textarea>
+    </main>
     <script>
+        const sections = [
+            ['canvas', 'Pie chart from JSON'],
+            ['pieXML', 'Pie chart from XML'],
+            ['barChart', 'Bar chart'],
+            ['areaChart', 'Area chart'],
+            ['bubbleChart', 'Bubble chart'],
+            ['donutChart', 'Donut chart'],
+            ['multiDonutChart', 'Multi donut chart'],
+            ['dynamic', 'Dynamic area']
+        ];
+        const sectionContainer = document.getElementById('sectionContainer');
+
+        sections.forEach(([id, label]) => {
+            const section = document.createElement('section');
+            section.id = `section-${id}`;
+            section.style.display = 'none';
+            section.className = 'flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5';
+
+            const labelElement = document.createElement('label');
+            labelElement.className = 'w-2/5 m-3 p-1 text-3xl text-center font-bold';
+            labelElement.textContent = label;
+            section.appendChild(labelElement);
+
+            const div = document.createElement('div');
+            div.className = 'flex justify-center m-5';
+            const canvas = document.createElement('canvas');
+            canvas.id = id;
+            canvas.width = '800';
+            canvas.height = '300';
+            canvas.textContent = 'This browser does not seem to support HTML5 Canvas.';
+            div.appendChild(canvas);
+            section.appendChild(div);
+
+            sectionContainer.appendChild(section);
+        });
+
         const charts = [
             ['canvas', 'Pie chart from JSON'],
             ['pieXML', 'Pie chart from XML'],
@@ -98,25 +95,106 @@
             button.textContent = text;
             buttonContainer.appendChild(button);
         });
-    </script>
 
-    
- <script type="text/javascript">
-    function showChart(id) {
-    // Hide all charts
-    document.getElementById('section-canvas').style.display = 'none';
-    document.getElementById('section-pieXML').style.display = 'none';
-    document.getElementById('section-barChart').style.display = 'none';
-    document.getElementById('section-areaChart').style.display = 'none';
-    document.getElementById('section-bubbleChart').style.display = 'none';
-    document.getElementById('section-donutChart').style.display = 'none';
-    document.getElementById('section-multiDonutChart').style.display = 'none';
-    document.getElementById('section-dynamic').style.display = 'none';
-    // Show the selected chart
-    document.getElementById('section-' + id).style.display = 'block';
-}
+        function showChart(id) {
+            sections.forEach(([chartId]) => {
+                document.getElementById(`section-${chartId}`).style.display = 'none';
+            });
+            document.getElementById(`section-${id}`).style.display = 'block';
+        }
 
-function drawDonut()
+        function initializeCharts() {
+            draw();
+            drawAreaCanvas();
+            drawDonut();
+            dynamicDraw();
+        }
+
+        function dynamicDraw() {
+            const dynamicLineChart = new Tee.Chart("dynamic");
+            addSeries(dynamicLineChart);
+            setTransp(dynamicLineChart, true);
+
+            dynamicLineChart.legend.visible = false;
+            dynamicLineChart.panel.format.gradient.visible = false;
+            dynamicLineChart.panel.format.shadow.visible = false;
+            dynamicLineChart.axes.left.title.text = "Meters per second";
+            dynamicLineChart.axes.bottom.automatic = false;
+            dynamicLineChart.axes.bottom.setMinMax(0, 10);
+            dynamicLineChart.title.text = "Rollercoaster";
+            dynamicLineChart.footer.text = "Dynamic update test";
+            dynamicLineChart.series.items[0].pointer.visible = true;
+            dynamicLineChart.series.items[0].pointer.style = "ellipse";
+            dynamicLineChart.series.items[0].pointer.format.shadow.visible = false;
+            dynamicLineChart.series.items[0].pointer.width = 10;
+            dynamicLineChart.series.items[0].pointer.height = 10;
+            dynamicLineChart.series.items[0].pointer.format.stroke.size = 1;
+            dynamicLineChart.series.items[0].pointer.format.shadow.visible = false;
+            dynamicLineChart.series.items[0].format.stroke.size = 2;
+            dynamicLineChart.series.items[0].format.shadow.visible = false;
+            dynamicLineChart.series.items[0].smooth = 1 / 2;
+            dynamicLineChart.axes.left.setMinMax(-0.5, 10.5);
+            var showCounter = new Tee.Annotation(dynamicLineChart);
+            dynamicLineChart.tools.add(showCounter);
+
+            var ms = 0, timeLastExecution = 70;
+            var old = new Date().getTime(), oldx = 0;
+            setInterval(function () {
+                dynamicLineChart.series.each(function (series) {
+                    var d = series.data.values, x = series.data.x, l = d.length;
+
+                    for (var t = 0; t < 1; t++) {
+                        d[l] = Math.random() * 10;
+                        x[l] = x[l - 1] + 1;
+                        d.shift();
+                        x.shift();
+                    }
+                });
+                dynamicLineChart.draw();
+                if (ms < 60) timeLastExecution = 60;
+                else timeLastExecution = ms;
+                ms = 0;
+            }, 1000);
+            setInterval(function () {
+                dynamicLineChart.axes.bottom.setMinMax(dynamicLineChart.series.items[0].data.x[0] + ms * 1 / timeLastExecution, dynamicLineChart.series.items[0].data.x[ms, dynamicLineChart.series.items[0].data.x.length - 1] + ms * 1 / timeLastExecution);
+                ms++;
+                dynamicLineChart.draw();
+            }, 10);
+            dynamicLineChart.applyTheme("minimal");
+            dynamicLineChart.draw();
+
+            var now = new Date().getTime();
+            if (showCounter.visible && ((now - old) > 1000)) {
+                var x = dynamicLineChart.series.items[0].data.x, last = x[x.length - 1];
+                showCounter.text = ((last - oldx)).toFixed(0) + " points/sec.";
+                old = now;
+                oldx = last;
+            }
+        }
+
+        function addSeries(chart) {
+            const points = 5;
+            chart.series.items = [];
+            chart.addSeries(new Tee.Area()).format.shadow.visible = false;
+
+            chart.series.each(function (series) {
+                series.addRandom(points, 20);
+                for (var i = 0; i < points; i++) {
+                    series.data.values[i] = Math.abs(series.data.values[i]);
+                    if (series.data.values[i] > 10) series.data.values[i] = series.data.values[i] % 10;
+                }
+                series.data.x = new Array(points);
+                for (var t = 0; t < points; t++) series.data.x[t] = t;
+            });
+        }
+
+        function setTransp(chart, value) {
+            chart.panel.transparent = value;
+            chart.walls.back.visible = !value;
+            chart.applyTheme("minimal");
+        }
+
+        function drawDonut()
 {
     //multidonut
     const multiDonutChart = new Tee.Chart("multiDonutChart");
@@ -274,62 +352,63 @@ function setConcentric(chart, value) {
     chart.draw();               
 }
 
-    function drawAreaCanvas() {
-        Chart1=new Tee.Chart("areaChart");
+
+function drawAreaCanvas() {
+    Chart1=new Tee.Chart("areaChart");
+
+    Chart1.panel.margins.top = 12;
+
+    const countries = ['Spain', 'Italy', 'Norway', 'France']
+    const area = new Tee.Area();
+    area.title = "Cat population";
+    Chart1.footer.text = "Cats";
+    area.format.fill = "rgba(187, 55, 25)";
+    const range = 11;
+    area.data.values[0] = Math.random() * range + 5;
+    area.data.labels[0] = "Israel";
     
-        Chart1.panel.margins.top = 12;
 
-        const countries = ['Spain', 'Italy', 'Norway', 'France']
-        const area = new Tee.Area();
-        area.title = "Cat population";
-        Chart1.footer.text = "Cats";
-        area.format.fill = "rgba(187, 55, 25)";
-        const range = 11;
-        area.data.values[0] = Math.random() * range + 5;
-        area.data.labels[0] = "Israel";
-        
-
-    for(let i= 1 ; i < countries.length; i++)
+for(let i= 1 ; i < countries.length; i++)
+{
+    let avl  = area.data.values[i-1] + (Math.random()*range) - (range*0.5);
+    
+    if(avl < 0)
     {
-        let avl  = area.data.values[i-1] + (Math.random()*range) - (range*0.5);
-        
-        if(avl < 0)
-        {
-            avl *= -1;
-        }
-        if(avl > 100)
-        {
-            avl -=20;
-        }
-        area.data.values[i] = avl;
-        area.data.labels[i] = countries[i];
-    }		   
-    Chart1.addSeries(area); //.pointer.visible=true;
-    //config some series appearance characteristics
-    Chart1.series.items[0].format.stroke.fill = Chart1.series.items[0].format.fill;
-    Chart1.series.items[0].format.stroke.size = 2;
-    Chart1.series.items[0].format.shadow.visible=false;
-    Chart1.series.items[0].format.transparency=0.12;
-    Chart1.series.items[0].smooth=0.1;
-    Chart1.series.items[0].hover = false;
+        avl *= -1;
+    }
+    if(avl > 100)
+    {
+        avl -=20;
+    }
+    area.data.values[i] = avl;
+    area.data.labels[i] = countries[i];
+}		   
+Chart1.addSeries(area); //.pointer.visible=true;
+//config some series appearance characteristics
+Chart1.series.items[0].format.stroke.fill = Chart1.series.items[0].format.fill;
+Chart1.series.items[0].format.stroke.size = 2;
+Chart1.series.items[0].format.shadow.visible=false;
+Chart1.series.items[0].format.transparency=0.12;
+Chart1.series.items[0].smooth=0.1;
+Chart1.series.items[0].hover = false;
 
 
-    //Axes
-    Chart1.axes.left.title.text="$ 000s";
-    Chart1.axes.left.title.visible=false;
-    Chart1.axes.left.labels.roundFirst=true;
-    Chart1.axes.bottom.labels.roundFirst=true;
-    Chart1.axes.bottom.title.format.font.setSize(14);
-    Chart1.axes.bottom.labels.dateFormat = "mm/yy";
-    Chart1.axes.left.increment=20;
-    Chart1.axes.left.setMinMax(0, 50);
-    Chart1.axes.left.grid.format.stroke.size = 1;
-    Chart1.axes.left.ticks.visible=false;
-    Chart1.axes.left.format.stroke.fill = "rgba(0,0,0,0.0)";
-    Chart1.axes.bottom.format.stroke.size = 1;
+//Axes
+Chart1.axes.left.title.text="$ 000s";
+Chart1.axes.left.title.visible=false;
+Chart1.axes.left.labels.roundFirst=true;
+Chart1.axes.bottom.labels.roundFirst=true;
+Chart1.axes.bottom.title.format.font.setSize(14);
+Chart1.axes.bottom.labels.dateFormat = "mm/yy";
+Chart1.axes.left.increment=20;
+Chart1.axes.left.setMinMax(0, 50);
+Chart1.axes.left.grid.format.stroke.size = 1;
+Chart1.axes.left.ticks.visible=false;
+Chart1.axes.left.format.stroke.fill = "rgba(0,0,0,0.0)";
+Chart1.axes.bottom.format.stroke.size = 1;
 
-    //Title
-    Chart1.title.visible = false;
+//Title
+Chart1.title.visible = false;
 
 
 // annotation (alternative title)
@@ -365,22 +444,22 @@ Chart1.tools.add(tip);
 tip.onhide=function() { scaling=0; poindex=-1; }
 
 tip.onshow=function(tool,series,index) {
-    if (enableCursor == false){
-        Chart1.tools.add(t);
-        enableCursor = true;
-        Chart1.draw();
-    }
+if (enableCursor == false){
+    Chart1.tools.add(t);
+    enableCursor = true;
+    Chart1.draw();
+}
 }		  
 
 tip.ongettext=function(tool, text, series, index) {
-    var t, s="", ser;
+var t, s="", ser;
 
-    for(t=0;t<Chart1.series.count(); t++) {
-    if (t>0) s+="<br/>";
-    ser=Chart1.series.items[t];
-    s+='<font face="verdana" color="darkorange" size="1"><b>'+ser.title+':</b></font> <font face="verdana" color="red" size="1">'+ser.data.values[index].toFixed(2)+' cats</font>';
-    }
-    return s;
+for(t=0;t<Chart1.series.count(); t++) {
+if (t>0) s+="<br/>";
+ser=Chart1.series.items[t];
+s+='<font face="verdana" color="darkorange" size="1"><b>'+ser.title+':</b></font> <font face="verdana" color="red" size="1">'+ser.data.values[index].toFixed(2)+' cats</font>';
+}
+return s;
 }
 
 
@@ -397,99 +476,8 @@ Chart1.draw();
 Chart1.applyTheme("minimal")
 
 }
-
-</script>
-
-<script type="text/javascript">//Dynamic update
-
-    const dynamicLineChart = new Tee.Chart("dynamicLineChart"), NEWPOINTS=1;
-    var ms = 0, autoSetMinMaxVar, timeLastExecution = 70;
-    function dynamicDraw() {
-    
-        addSeries(1);
-    
-        setTransp(true);
-    
-        dynamicLineChart.legend.visible=false;
-        dynamicLineChart.panel.format.gradient.visible=false;
-        dynamicLineChart.panel.format.shadow.visible=false;
-        dynamicLineChart.axes.left.title.text = "Meters per second";
-        dynamicLineChart.axes.bottom.automatic = false;
-        dynamicLineChart.axes.bottom.setMinMax(0,10);
-        dynamicLineChart.title.text = "Rollercoaster";
-        dynamicLineChart.footer.text ="Dynamic update test";
-        dynamicLineChart.series.items[0].pointer.visible = true;
-        dynamicLineChart.series.items[0].pointer.style = "ellipse";
-        dynamicLineChart.series.items[0].pointer.format.shadow.visible = false;
-        dynamicLineChart.series.items[0].pointer.width = 10;
-        dynamicLineChart.series.items[0].pointer.height = 10;
-        dynamicLineChart.series.items[0].pointer.format.stroke.size = 1;
-        dynamicLineChart.series.items[0].pointer.format.shadow.visible = false;
-        dynamicLineChart.series.items[0].format.stroke.size = 2;
-        dynamicLineChart.series.items[0].format.shadow.visible = false;
-        dynamicLineChart.series.items[0].smooth = 1 / 2;
-        dynamicLineChart.axes.left.setMinMax(-0.5, 10.5);
-        var showCounter=new Tee.Annotation(dynamicLineChart);
-       dynamicLineChart.tools.add(showCounter);
-    
-        var old=new Date().getTime(), oldx=0;
-        setInterval(function () {
-            dynamicLineChart.series.each(function (series) {
-                var d = series.data.values, x = series.data.x, t, l = d.length;
-    
-                for (t = 0; t < NEWPOINTS; t++) {
-                    d[l] = Math.random() * 10;
-                    x[l] = x[l - 1] + 1;
-                    d.shift();
-                    x.shift();
-                }
-            });
-            dynamicLineChart.draw();
-            if (ms < 60) timeLastExecution = 60;
-            else timeLastExecution = ms;
-            ms = 0;
-        }, 1000);
-        setInterval(function () {
-            dynamicLineChart.axes.bottom.setMinMax(dynamicLineChart.series.items[0].data.x[0] + ms * 1 / timeLastExecution, dynamicLineChart.series.items[0].data.x[ms, dynamicLineChart.series.items[0].data.x.length - 1] + ms * 1 / timeLastExecution);
-            ms++;
-            dynamicLineChart.draw();
-        }, 10);
-        dynamicLineChart.applyTheme("minimal");
-        dynamicLineChart.draw();
-    
-        now=new Date().getTime();
-    
-        if (showCounter.visible && ((now-old)>1000) ) {
-          var x=dynamicLineChart.series.items[0].data.x, last=x[x.length-1];
-          showCounter.text=((last-oldx)).toFixed(0)+" points/sec.";
-          old=now;
-          oldx=last;
-        }
-    }
-    
-    function addSeries() {
-    
-        points=5;
-        dynamicLineChart.series.items=[];
-        dynamicLineChart.addSeries(new Tee.Area()).format.shadow.visible=false;
-    
-        dynamicLineChart.series.each(function (series) {
-            series.addRandom(points, 20);
-            for (var i = 0; i < points; i++) {
-                series.data.values[i] = Math.abs(series.data.values[i]);
-                if (series.data.values[i] > 10) series.data.values[i] = series.data.values[i] % 10;
-            }
-            series.data.x = new Array(points);
-            for (var t = 0; t < points; t++) series.data.x[t] = t;
-        });
-        
-    }
-    function setTransp(value) {
-        dynamicLineChart.panel.transparent=value;
-        dynamicLineChart.walls.back.visible=!value;
-        dynamicLineChart.applyTheme("minimal");
-    }
     </script>
+
 
         
         
