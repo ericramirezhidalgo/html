@@ -384,8 +384,8 @@ Chart1.applyTheme("minimal")
 }
 
 </script>
-//Dynamic update
-<script type="text/javascript">
+
+<script type="text/javascript">//Dynamic update
 
     const dynamicLineChart = new Tee.Chart("dynamicLineChart"), NEWPOINTS=1;
     var ms = 0, autoSetMinMaxVar, timeLastExecution = 70;
@@ -399,7 +399,7 @@ Chart1.applyTheme("minimal")
         dynamicLineChart.legend.visible=false;
         dynamicLineChart.panel.format.gradient.visible=false;
         dynamicLineChart.panel.format.shadow.visible=false;
-        dynamicLineChart.axes.left.title.text = "Data";
+        dynamicLineChart.axes.left.title.text = "Meters per second";
         dynamicLineChart.axes.bottom.automatic = false;
         dynamicLineChart.axes.bottom.setMinMax(0,10);
         dynamicLineChart.title.text = "Rollercoaster";
