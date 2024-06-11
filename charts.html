@@ -15,7 +15,18 @@
                     </div>
                 </div>
             </div>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <div class="flex justify-center m-5">
+                <button onclick="showChart('canvas')" class="m-2 p-2 bg-blue-500 text-white rounded">Pie chart from JSON</button>
+                <button onclick="showChart('pieXML')" class="m-2 p-2 bg-blue-500 text-white rounded">Pie chart from XML</button>
+                <button onclick="showChart('barChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Bar chart</button>
+                <button onclick="showChart('areaChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Area chart</button>
+                <button onclick="showChart('bubbleChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Bubble chart</button>
+                <button onclick="showChart('donutChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Donut chart</button>
+                <button onclick="showChart('multiDonutChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Multi donut chart</button>
+                <button onclick="showChart('dynamic')" class="m-2 p-2 bg-blue-500 text-white rounded">Dynamic area</button>
+            </div>
+            
+            <section id="section-canvas" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from JSON</label>
                 <div class="flex justify-center m-5">
                     <canvas id="canvas" width="800" height="300">
@@ -23,7 +34,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-pieXML" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from XML</label>
                 <div class="flex justify-center m-5">
                     <canvas id="pieXML" width="800" height="300">
@@ -31,7 +42,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-barChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bar chart</label>
                 <div class="flex justify-center m-5">
                     <canvas id="barChart" width="800" height="300">
@@ -39,7 +50,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-areaChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Area chart</label>
                 <div class="flex justify-center m-5">
                     <canvas id="areaChart" width="800" height="300">
@@ -47,7 +58,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-bubbleChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Bubble chart</label>
                 <div class="flex justify-center m-5">
                     <canvas id="bubbleChart" width="800" height="300">
@@ -55,7 +66,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-donutChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Donut</label>
                 <div class="flex justify-center m-5">
                     <canvas id="donutChart" width="800" height="300">
@@ -63,7 +74,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-multiDonutChart" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Multi donut</label>
                 <div class="flex justify-center m-5">
                     <canvas id="multiDonutChart" width="800" height="300">
@@ -71,7 +82,7 @@
                     </canvas>
                 </div>
             </section>
-            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+            <section id="section-dynamic" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Dynamic area</label>
                 <div class="flex justify-center m-5">
                     <canvas id="dynamicLineChart" width="800" height="300">
@@ -101,6 +112,20 @@
             </textarea>
         </main>
  <script type="text/javascript">
+    function showChart(id) {
+    // Hide all charts
+    document.getElementById('section-canvas').style.display = 'none';
+    document.getElementById('section-pieXML').style.display = 'none';
+    document.getElementById('section-barChart').style.display = 'none';
+    document.getElementById('section-areaChart').style.display = 'none';
+    document.getElementById('section-bubbleChart').style.display = 'none';
+    document.getElementById('section-donutChart').style.display = 'none';
+    document.getElementById('section-multiDonutChart').style.display = 'none';
+    document.getElementById('section-dynamic').style.display = 'none';
+    // Show the selected chart
+    document.getElementById('section-' + id).style.display = 'block';
+}
+
 function drawDonut()
 {
     //multidonut
@@ -390,7 +415,6 @@ Chart1.applyTheme("minimal")
     const dynamicLineChart = new Tee.Chart("dynamicLineChart"), NEWPOINTS=1;
     var ms = 0, autoSetMinMaxVar, timeLastExecution = 70;
     function dynamicDraw() {
-        Chart1=new Tee.Chart("dynamicLineChart");
     
         addSeries(1);
     
@@ -440,7 +464,7 @@ Chart1.applyTheme("minimal")
             ms++;
             dynamicLineChart.draw();
         }, 10);
-        changeTheme(dynamicLineChart, "minimal");
+        dynamicLineChart.applyTheme("minimal");
         dynamicLineChart.draw();
     
         now=new Date().getTime();
@@ -476,7 +500,7 @@ Chart1.applyTheme("minimal")
         dynamicLineChart.applyTheme("minimal");
     }
     </script>
-        
+
         
         
         <script src="https://cdn.tailwindcss.com"></script>
