@@ -6,7 +6,7 @@
         <title>Charts</title>
         <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart-extras.js" type="text/javascript"></script>
     </head>
-    <body onload="draw(), drawAreaCanvas(), drawDonut()" class="bg-gray-800">
+    <body onload="draw(), drawAreaCanvas(), drawDonut(), dynamicDraw()" class="bg-gray-800">
         <main>
             <div class="container mx-auto  w-3/4 m-2 p-5 rounded-lg">
                 <div class="flex justify-center">
@@ -71,6 +71,14 @@
                     </canvas>
                 </div>
             </section>
+            <section class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
+                <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Dynamic area</label>
+                <div class="flex justify-center m-5">
+                    <canvas id="dynamicLineChart" width="800" height="300">
+                        This browser does not seem to support HTML5 Canvas.
+                    </canvas>
+                </div>
+            </section>
             <textarea id="json" style="display:none;">
                 {
                     "values": [123, 456, 789, 902],
@@ -92,7 +100,7 @@
                 </series>
             </textarea>
         </main>
-        <script type="text/javascript">
+ <script type="text/javascript">
 function drawDonut()
 {
     //multidonut
@@ -375,7 +383,99 @@ Chart1.applyTheme("minimal")
 
 }
 
-        </script>
+</script>
+//Dynamic update
+<script type="text/javascript">
+
+    const dynamicLineChart = new Tee.Chart("dynamicLineChart"), NEWPOINTS=1;
+    var ms = 0, autoSetMinMaxVar, timeLastExecution = 70;
+    function dynamicDraw() {
+        Chart1=new Tee.Chart("dynamicLineChart");
+    
+        addSeries(1);
+    
+        setTransp(true);
+    
+        dynamicLineChart.legend.visible=false;
+        dynamicLineChart.panel.format.gradient.visible=false;
+        dynamicLineChart.panel.format.shadow.visible=false;
+        dynamicLineChart.axes.left.title.text = "Data";
+        dynamicLineChart.axes.bottom.automatic = false;
+        dynamicLineChart.axes.bottom.setMinMax(0,10);
+        dynamicLineChart.title.text = "Rollercoaster";
+        dynamicLineChart.footer.text ="Dynamic update test";
+        dynamicLineChart.series.items[0].pointer.visible = true;
+        dynamicLineChart.series.items[0].pointer.style = "ellipse";
+        dynamicLineChart.series.items[0].pointer.format.shadow.visible = false;
+        dynamicLineChart.series.items[0].pointer.width = 10;
+        dynamicLineChart.series.items[0].pointer.height = 10;
+        dynamicLineChart.series.items[0].pointer.format.stroke.size = 1;
+        dynamicLineChart.series.items[0].pointer.format.shadow.visible = false;
+        dynamicLineChart.series.items[0].format.stroke.size = 2;
+        dynamicLineChart.series.items[0].format.shadow.visible = false;
+        dynamicLineChart.series.items[0].smooth = 1 / 2;
+        dynamicLineChart.axes.left.setMinMax(-0.5, 10.5);
+        var showCounter=new Tee.Annotation(dynamicLineChart);
+       dynamicLineChart.tools.add(showCounter);
+    
+        var old=new Date().getTime(), oldx=0;
+        setInterval(function () {
+            dynamicLineChart.series.each(function (series) {
+                var d = series.data.values, x = series.data.x, t, l = d.length;
+    
+                for (t = 0; t < NEWPOINTS; t++) {
+                    d[l] = Math.random() * 10;
+                    x[l] = x[l - 1] + 1;
+                    d.shift();
+                    x.shift();
+                }
+            });
+            dynamicLineChart.draw();
+            if (ms < 60) timeLastExecution = 60;
+            else timeLastExecution = ms;
+            ms = 0;
+        }, 1000);
+        setInterval(function () {
+            dynamicLineChart.axes.bottom.setMinMax(dynamicLineChart.series.items[0].data.x[0] + ms * 1 / timeLastExecution, dynamicLineChart.series.items[0].data.x[ms, dynamicLineChart.series.items[0].data.x.length - 1] + ms * 1 / timeLastExecution);
+            ms++;
+            dynamicLineChart.draw();
+        }, 10);
+        changeTheme(dynamicLineChart, "minimal");
+        dynamicLineChart.draw();
+    
+        now=new Date().getTime();
+    
+        if (showCounter.visible && ((now-old)>1000) ) {
+          var x=dynamicLineChart.series.items[0].data.x, last=x[x.length-1];
+          showCounter.text=((last-oldx)).toFixed(0)+" points/sec.";
+          old=now;
+          oldx=last;
+        }
+    }
+    
+    function addSeries() {
+    
+        points=5;
+        dynamicLineChart.series.items=[];
+        dynamicLineChart.addSeries(new Tee.Area()).format.shadow.visible=false;
+    
+        dynamicLineChart.series.each(function (series) {
+            series.addRandom(points, 20);
+            for (var i = 0; i < points; i++) {
+                series.data.values[i] = Math.abs(series.data.values[i]);
+                if (series.data.values[i] > 10) series.data.values[i] = series.data.values[i] % 10;
+            }
+            series.data.x = new Array(points);
+            for (var t = 0; t < points; t++) series.data.x[t] = t;
+        });
+        
+    }
+    function setTransp(value) {
+        dynamicLineChart.panel.transparent=value;
+        dynamicLineChart.walls.back.visible=!value;
+        dynamicLineChart.applyTheme("minimal");
+    }
+    </script>
         
         
         
