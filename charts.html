@@ -14,7 +14,7 @@
                     <p class="text-4xl font-bold text-center">Charts</p>
                 </div>
             </div>
-            <div id="buttonContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2"></div>
+            <div id="buttonContainer" class="rounded-lg p-3 w-5/5 flex justify-center mx-auto mt-2"></div>
             <div id="sectionContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2"></div>
         </div>
       
@@ -48,7 +48,8 @@
             ['bubbleChart', 'Bubble chart'],
             ['donutChart', 'Donut chart'],
             ['multiDonutChart', 'Multi donut chart'],
-            ['dynamic', 'Dynamic area']
+            ['dynamic', 'Dynamic area'],
+            ['horiBarChart', 'Horizontal bar chart']
         ];
         const sectionContainer = document.getElementById('sectionContainer');
 
@@ -84,7 +85,8 @@
             ['bubbleChart', 'Bubble chart'],
             ['donutChart', 'Donut chart'],
             ['multiDonutChart', 'Multi donut chart'],
-            ['dynamic', 'Dynamic area']
+            ['dynamic', 'Dynamic area'],
+            ['horiBarChart', 'Horizontal bar chart']
         ];
         const buttonContainer = document.getElementById('buttonContainer');
 
@@ -108,6 +110,89 @@
             drawAreaCanvas();
             drawDonut();
             dynamicDraw();
+            horiBarDraw();
+        }
+        function horiBarDraw() {
+       const horiBarChart=new Tee.Chart("horiBarChart");
+
+       horiBarChart.addSeries(new Tee.HorizBar([-5,-4.4,-3.2,-3.8,-5.1,-5.6,-5.2,-4.2,-3.4,-2.8,-2.2,-1.7,-1.1,-0.8,-0.5,-0.5]));
+       horiBarChart.addSeries(new Tee.HorizBar([4.8,4.1,3.4,3.8,5.1,5.1,4.8,4.1,3.6,3,2.5,1.9,1.3,1,0.8,1.2]));
+        
+       horiBarChart.series.items[0].title = "Male";
+       horiBarChart.series.items[1].title = "Female";
+        
+        for (i = 0; i < 2; i++)
+        {
+            horiBarChart.series.items[i].cursor="pointer";
+            horiBarChart.series.items[i].data.x=[0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75];
+            horiBarChart.series.items[i].origin=0;
+            horiBarChart.series.items[i].useOrigin=true;
+            horiBarChart.series.items[i].stacked="side";
+            horiBarChart.series.items[i].format.gradient.visible = false;
+            horiBarChart.series.items[i].format.stroke.fill = "rgba(0,0,0,0.0)";
+            horiBarChart.series.items[i].format.shadow.visible=false;
+            horiBarChart.series.items[i].marks.visible = false;
+            horiBarChart.series.items[i].barSize = 100;
+            horiBarChart.series.items[i].hover = false;
+        }
+        horiBarChart.series.items[0].format.fill="rgba(255,165,0,0.8)";
+        horiBarChart.series.items[1].format.fill="rgba(100,149,237,0.8)";
+        
+        horiBarChart.axes.left.title.text="Age";
+        horiBarChart.axes.left.grid.centered=true;
+        horiBarChart.axes.left.increment=5;
+        horiBarChart.axes.left.format.stroke.size = 0.5;
+        horiBarChart.axes.left.title.format.font.fill = "rgb(0,0,0)";
+        horiBarChart.axes.left.labels.format.font.fill = "rgb(0,0,0)";
+        horiBarChart.axes.bottom.title.text="%";
+        horiBarChart.axes.bottom.setMinMax(-7, 7);
+        horiBarChart.axes.bottom.format.stroke.size = 0.5;
+        horiBarChart.axes.bottom.grid.visible=false;
+        horiBarChart.axes.bottom.labels.visible = true;
+        horiBarChart.axes.bottom.title.format.font.fill = "rgb(0,0,0)";
+        
+        horiBarChart.walls.visible=false;
+        horiBarChart.title.visible=false;
+        
+        horiBarChart.panel.format.gradient.visible=false;
+        horiBarChart.panel.format.shadow.visible=false;
+        horiBarChart.panel.format.fill="rgba(255,255,255,1)";
+        horiBarChart.panel.format.stroke.fill="rgba(255,255,255,1)";
+        
+        //changeTheme(Chart1, "minimal");
+        horiBarChart.legend.textStyle="percent";
+        horiBarChart.legend.format.stroke.fill = "white";
+        horiBarChart.legend.transparent=false;
+
+        //tooltip
+        tip=new Tee.ToolTip(horiBarChart);
+        tip.render="dom";
+        tip.autoHide=false;
+        tip.domStyle = "padding-left:8px; padding-right:8px; padding-top:0px; padding-bottom:4px; margin-left:5px; margin-top:0px; ";
+        tip.domStyle = tip.domStyle + "background-color:#FCFCFC; border-radius:4px 4px; color:#FFF; ";
+        tip.domStyle = tip.domStyle + "border-style:solid;border-color:#A3A3AF;border-width:1px; z-index:1000;";
+
+        horiBarChart.tools.add(tip);
+        tip.onhide=function() { scaling=0; poindex=-1; }
+        tip.ongettext=function( tool, text, series, index) {
+            var s;
+            if(series.title==="Male"){
+                    s = '<font face="verdana" color="darkorange" size="1"><strong>'+ series.title+'</strong></font>';
+                    if(index*5<75) s = s + '<br/><font face="verdana" color="orange" size="1">Age: <strong>'+ (index * 5) + " - " + (index * 5 + 4) +'</strong></font>';
+                    else s = s + '<br/><font face="verdana" color="orange" size="1">Age: <strong>'+ (index * 5) + '+</strong></font>';
+                    s =	s +'<br/><font face="verdana" color="darkorange" size="1">Percentage: '+ Math.abs(series.data.values[index]) +'%</font>';
+            }
+            else if(series.title==="Female"){
+                s = '<font face="verdana" color="CornflowerBlue" size="1"><strong>'+ series.title+'</strong></font>';
+                if(index*5<75) s = s + '<br/><font face="verdana" color="CornflowerBlue" size="1">Age: <strong>'+ (index * 5) + " - " + (index * 5 + 4) +'</strong></font>';
+                else s = s + '<br/><font face="verdana" color="CornflowerBlue" size="1">Age: <strong>'+ (index * 5) + '+</strong></font>';
+                s =	s +'<br/><font face="verdana" color="CornflowerBlue" size="1">Percentage: '+ Math.abs(series.data.values[index]) +'%</font>';
+            }
+            return s;
+        };
+
+        horiBarChart.draw();
+        horiBarChart.applyTheme("minimal")
         }
 
         function dynamicDraw() {
@@ -476,6 +561,8 @@ Chart1.draw();
 Chart1.applyTheme("minimal")
 
 }
+
+
     </script>
 
 
