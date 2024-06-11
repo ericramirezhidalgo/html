@@ -8,24 +8,16 @@
     </head>
     <body onload="draw(), drawAreaCanvas(), drawDonut(), dynamicDraw()" class="bg-gray-800">
         <main>
-            <div class="container mx-auto  w-3/4 m-2 p-5 rounded-lg">
+            <div class="container mx-auto w-3/4 m-2 p-5 rounded-lg">
                 <div class="flex justify-center">
                     <div class="w-1/2 bg-white mt-3 p-2 text-gray-800 rounded-lg flex flex-col">
                         <p class="text-4xl font-bold text-center">Charts</p>
                     </div>
                 </div>
+                <div id="buttonContainer" class="bg-white rounded-lg p-3 w-5/6 flex justify-center mx-auto mt-2">
+                </div>
             </div>
-            <div class="flex justify-center m-5">
-                <button onclick="showChart('canvas')" class="m-2 p-2 bg-blue-500 text-white rounded">Pie chart from JSON</button>
-                <button onclick="showChart('pieXML')" class="m-2 p-2 bg-blue-500 text-white rounded">Pie chart from XML</button>
-                <button onclick="showChart('barChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Bar chart</button>
-                <button onclick="showChart('areaChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Area chart</button>
-                <button onclick="showChart('bubbleChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Bubble chart</button>
-                <button onclick="showChart('donutChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Donut chart</button>
-                <button onclick="showChart('multiDonutChart')" class="m-2 p-2 bg-blue-500 text-white rounded">Multi donut chart</button>
-                <button onclick="showChart('dynamic')" class="m-2 p-2 bg-blue-500 text-white rounded">Dynamic area</button>
-            </div>
-            
+
             <section id="section-canvas" style="display:none" class="flex flex-col p-2 mx-auto w-2/4 m-5 bg-white rounded-lg items-center mt-5">
                 <label class="w-2/5 m-3 p-1 text-3xl text-center font-bold">Pie chart from JSON</label>
                 <div class="flex justify-center m-5">
@@ -111,6 +103,29 @@
                 </series>
             </textarea>
         </main>
+    <script>
+        const charts = [
+            ['canvas', 'Pie chart from JSON'],
+            ['pieXML', 'Pie chart from XML'],
+            ['barChart', 'Bar chart'],
+            ['areaChart', 'Area chart'],
+            ['bubbleChart', 'Bubble chart'],
+            ['donutChart', 'Donut chart'],
+            ['multiDonutChart', 'Multi donut chart'],
+            ['dynamic', 'Dynamic area']
+        ];
+        const buttonContainer = document.getElementById('buttonContainer');
+
+        charts.forEach(([chart, text]) => {
+            const button = document.createElement('button');
+            button.onclick = () => showChart(chart);
+            button.className = 'm-2 p-2 bg-blue-500 hover:bg-blue-400 text-white rounded';
+            button.textContent = text;
+            buttonContainer.appendChild(button);
+        });
+    </script>
+
+    
  <script type="text/javascript">
     function showChart(id) {
     // Hide all charts
