@@ -70,7 +70,7 @@ function drawLine() {
   const charts = ["line1", "line2","line3","line4"];
   const data = [[738, 812, 712, 921,604,800, 1024, 1203,1100], [238, 612, 512, 221,1004,1220, 1524, 1003,1100],[2042,1994,1801,1730,1601,1498,1339,1245,1004],
                 [100,79,78,27,106,115,94,93,99]];
-
+  
   const labels = ["Total Revenue", "Total Visitors", "Total Transactions", "Total Products"]
   for (let i = 0; i < charts.length; i++) {
     const lineChart = new Tee.Chart(charts[i]);
@@ -81,8 +81,11 @@ function drawLine() {
     lineChart.axes.visible = false;
     lineChart.applyTheme("minimal");
     lineChart.title.text = labels[i%4];
+    lineChart.footer.format.font.fill = "black";
     lineChart.title.format.size = 5;
     series.format.stroke.fill = i === 2 ? "red" : "green";
+    lineChart.footer.text = i === 2 ? "-2% vs preview 28 days" : (i % 3 == 0 ? "3% vs preview 28 days" : "1% vs preview 28 days");
+
     series.format.stroke.size = 2;
     lineChart.draw();
   }
