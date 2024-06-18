@@ -1,28 +1,71 @@
-<body onload="draw(), drawArea(), drawLine()"></body>
-<div class="flex">
-    <div class="bg-gray-100 mr-10 mt-28 pt-2 p-20 h-auto mb-10 w-1/2 rounded-md ml-28 flex justify-center items-center">
-        <canvas id="bar" width="800" height="300" class="mt-10 mb-5 rounded-lg"></canvas>
+<body onload="draw(), drawArea(), drawLine(), drawDonut()"></body>
+<div class="flex justify-center">
+  <div class="bg-gray-100 mt-28 ml-10 pt-2 p-20 mb-10 h-auto w-1/2 rounded-md flex flex-wrap justify-around">
+    <div class="w-full flex justify-around">
+        <canvas id="bar" width="600" height="300" class="rounded-lg m-5"></canvas>
+      </div>
     </div>
 
     <div class="bg-gray-100 mt-28 ml-10 pt-2 p-20 mb-10 h-auto w-1/3 rounded-md flex flex-wrap justify-around">
         <div class="w-full flex justify-around">
-            <canvas id="line1" width="200" height="200" class="rounded-lg"></canvas> 
-            <canvas id="line2" width="200" height="200" class="rounded-lg"></canvas>
+            <canvas id="line1" width="200" height="200" class="rounded-lg m-2"></canvas> 
+            <canvas id="line2" width="200" height="200" class="rounded-lg m-2"></canvas>
         </div>
         <div class="w-full flex justify-around">
-            <canvas id="line3" width="200" height="200" class="rounded-lg"></canvas>
-            <canvas id="line4" width="200" height="200" class="rounded-lg"></canvas>
+            <canvas id="line3" width="200" height="200" class="rounded-lg m-2"></canvas>
+            <canvas id="line4" width="200" height="200" class="rounded-lg m-2"></canvas>
         </div>
     </div>
 </div>
 
-<div class="bg-gray-100 mr-10 mt-10 pt-2 p-20 h-auto w-1/2 rounded-md ml-28 flex justify-center items-center">
-    <canvas id="area" width="800" height="300" class="mt-10 mr-10 mb-5 rounded-lg"></canvas>
+<div class="flex justify-center">
+  <div class="bg-gray-100 mt-5 ml-10 pt-2 p-20 mb-10 h-auto w-1/2 rounded-md flex flex-wrap justify-around">
+    <div class="w-full flex justify-around">
+      <canvas id="area" width="600" height="300" class="rounded-lg mt-10 ml-5 mr-5"></canvas>
+    </div>
+    </div>
+    <div class="bg-gray-100 mt-5 ml-10 pt-2 p-20 mb-10 h-auto w-1/3 rounded-md flex flex-wrap justify-around">
+ 
+        <div class="w-full flex justify-around">
+          <canvas id="donut" width="500" height="300" class="rounded-lg mt-10 ml-5 mr-5"></canvas>
+        </div>
+    </div>
 </div>
+
 
 <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+function drawDonut() {
+  const donutChart = new Tee.Chart("donut")
+  const series = new Tee.Donut()
+  donutChart.addSeries(series)
+
+  donutChart.series.items[0].explode=[0,30,0,0,0];
+  series.rotation = -30
+  series.data.values = [25,35,40]
+  series.data.labels = ["Clothing", "Body Fit", "Sportswear"] 
+  donutChart.title.text = "Sales by category"
+  series.marks.visible = false
+  const tooltip = new Tee.ToolTip(donutChart)
+  tooltip.autoHide = true
+  tooltip.delay = 1000
+  tooltip.animated = 200
+  tooltip.findPoint = true
+
+  donutChart.tools.add(tooltip)
+  donutChart.applyTheme("minimal")
+
+
+
+  donutChart.legend.visible = true;
+  donutChart.legend.position = "right";
+  donutChart.legend.format.font.fill = "black";
+  donutChart.legend.format.font.size = 14;
+
+  donutChart.draw();
+}
+
 function drawLine() {
   const charts = ["line1", "line2","line3","line4"];
   const data = [[738, 812, 712, 921,604,800, 1024, 1203,1100], [238, 612, 512, 221,1004,1220, 1524, 1003,1100],[2042,1994,1801,1730,1601,1498,1339,1245,1004],
