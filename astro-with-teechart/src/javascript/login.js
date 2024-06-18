@@ -2,12 +2,7 @@
 
     buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        alert('Login success');
-    });
-    });
-
-
-    /* const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
+        const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
     const inputEmail = document.getElementById('inputEmail').value;
     const inputPassword = document.getElementById('inputPassword').value;
 
@@ -15,8 +10,13 @@
 
     if (user) {
         localStorage.setItem('loggedInUser', JSON.stringify(user));
-        window.location.href = 'home.html';
+        window.location.href = 'home#';
 
     } else {
         document.getElementById('error').textContent = 'Incorrect email or password';
-    }*/
+    }
+    });
+    });
+
+
+    /* */
