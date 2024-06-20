@@ -1,6 +1,21 @@
 import { column, defineDb, defineTable } from 'astro:db';
 
-const User = defineTable({
+
+interface User {
+  username: string;
+  password: string;
+  mail: string;
+  dateOfBirth: Date;
+  gender: string;
+  planType: string;
+}
+
+interface MyDatabase {
+  User: User;
+
+}
+
+const UserTable = defineTable({
   columns: {
     username: column.text(),
     password: column.text(),
@@ -12,6 +27,8 @@ const User = defineTable({
 });
 
 
-export default defineDb({
-  tables: {User}
-});
+const db = defineDb({
+  tables: { User: UserTable }
+}) as MyDatabase;
+
+export default db;
