@@ -11,9 +11,10 @@ export const POST: APIRoute = async function post({ request }) {
     let { mail, password } = await request.json();
     console.log('Parsed email and password:', mail, password);
 
-    const user = await db.select().from(User).where(u => eq(u.mail, mail));
+    const users = await db.select().from(User).where(u => eq(u.mail, mail));
+    const user = users[0];
 
-    if (user) {
+    if (user && user.password === password) {
       return new Response(JSON.stringify(user), { status: 200 });
     } else {
       return new Response('Incorrect email or password', { status: 401 });

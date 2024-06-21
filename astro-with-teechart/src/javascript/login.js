@@ -18,13 +18,10 @@ buttons.forEach((button) => {
 
         if (response.ok) {
             const user = await response.json();
-            await setLoggedInUser(user);
+            sessionStorage.setItem('loggedInUser', JSON.stringify(user));
             window.location.href = 'home#';
         } else {
-            document.getElementById('error').textContent = 'Correo electrónico o contraseña incorrectos';
+            document.getElementById('error').textContent = 'Incorrect mail or password';
         }
     });
 });
-async function setLoggedInUser(user) {
-    localStorage.setItem('loggedInUser', JSON.stringify(user));
-}
