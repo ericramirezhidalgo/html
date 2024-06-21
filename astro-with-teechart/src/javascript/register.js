@@ -1,4 +1,9 @@
 const confirmButton = document.querySelector('button.confirm-btn');
+const cancelButton = document.querySelector("button.cancel-btn");
+
+cancelButton.addEventListener('click', () => {
+  window.location.href = 'login#'
+})
 
 confirmButton.addEventListener('click', async () => {
     const userName = document.getElementById("inputUsername").value;
