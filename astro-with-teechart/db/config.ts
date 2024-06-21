@@ -1,6 +1,12 @@
 import { column, defineDb, defineTable } from 'astro:db';
 
 
+interface ChartData {
+  id: string;
+  type: string;
+  data: number[];
+}
+
 interface User {
   username: string;
   password: string;
@@ -12,8 +18,19 @@ interface User {
 
 interface MyDatabase {
   User: User;
+  ChartData: ChartData;
 
 }
+
+const ChartDataTable = defineTable({
+  columns: {
+    id: column.text(),
+    type: column.text(),
+    data: column.text(),
+  },
+});
+
+
 
 const UserTable = defineTable({
   columns: {
@@ -28,7 +45,7 @@ const UserTable = defineTable({
 
 
 const db = defineDb({
-  tables: { User: UserTable }
+  tables: { User: UserTable, ChartData:ChartDataTable }
 }) as MyDatabase;
 
 export default db;

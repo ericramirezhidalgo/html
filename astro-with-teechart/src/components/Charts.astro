@@ -1,4 +1,4 @@
-<body onload="draw(), drawArea(), drawLine(), drawDonut()"></body>
+<body onload="draw(), drawArea(), drawLine(), drawDonut(), loadData()"></body>
 <div class="flex justify-center">
   <div class="bg-gray-100 mt-28 ml-10 pt-2 p-20 mb-10 h-auto w-1/2 rounded-md flex flex-wrap justify-around">
     <div class="w-full flex justify-around">
@@ -36,101 +36,267 @@
 <script src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-function drawDonut() {
-  const donutChart = new Tee.Chart("donut")
-  const series = new Tee.Donut()
-  donutChart.addSeries(series)
+async function drawDonut() {
+  const response = await fetch('/api/data/getData', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  const chartData = await response.json();
 
-  donutChart.series.items[0].explode=[0,30,0,0,0];
-  series.rotation = -30
-  series.data.values = [25,35,40]
-  series.data.labels = ["Clothing", "Body Fit", "Sportswear"] 
-  donutChart.title.text = "Sales by category"
-  series.marks.visible = false
-  const tooltip = new Tee.ToolTip(donutChart)
-  tooltip.autoHide = true
-  tooltip.delay = 1000
-  tooltip.animated = 200
-  tooltip.findPoint = true
-
-  donutChart.tools.add(tooltip)
-  donutChart.applyTheme("minimal")
+  const donutChartData = chartData.find(data => data.id === 'donut');
+  if(donutChartData) {
+    const donutChart = new Tee.Chart("donut")
+    const series = new Tee.Donut()
+    donutChart.addSeries(series)
 
 
+    series.data.values = JSON.parse(donutChartData.data)
 
-  donutChart.legend.visible = true;
-  donutChart.legend.position = "right";
-  donutChart.legend.format.font.fill = "black";
-  donutChart.legend.format.font.size = 14;
-
-  donutChart.draw();
-}
-
-function drawLine() {
-  const charts = ["line1", "line2","line3","line4"];
-  const data = [[738, 812, 712, 921,604,800, 1024, 1203,1100], [238, 612, 512, 221,1004,1220, 1524, 1003,1100],[2042,1994,1801,1730,1601,1498,1339,1245,1004],
-                [100,79,78,27,106,115,94,93,99]];
-  
-  const labels = ["Total Revenue", "Total Visitors", "Total Transactions", "Total Products"]
-  for (let i = 0; i < charts.length; i++) {
-    const lineChart = new Tee.Chart(charts[i]);
-    const series = new Tee.Line();
-    lineChart.addSeries(series);
-    series.data.values = data[i];
-    lineChart.legend.visible = false;
-    lineChart.axes.visible = false;
-    lineChart.applyTheme("minimal");
-    lineChart.title.text = labels[i%4];
-    lineChart.footer.format.font.fill = "black";
-    lineChart.title.format.size = 5;
-    series.format.stroke.fill = i === 2 ? "red" : "green";
-    lineChart.footer.text = i === 2 ? "-2% vs preview 28 days" : (i % 3 == 0 ? "3% vs preview 28 days" : "1% vs preview 28 days");
-
-    series.format.stroke.size = 2;
-    lineChart.draw();
-  }
-}
-
-
-function draw() {
-    const barChart = new Tee.Chart("bar")
-    const series = new Tee.Bar()
-    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-    barChart.addSeries(series)
-
-    series.data.values = [205, 190, 195, 380, 300, 105, 100]
-    barChart.title.text = "Total Sales"
-    barChart.title.format.fill = "black"
-    barChart.title.format.align = "left"
-    barChart.title.format.size = 20
-    barChart.legend.visible = false
-    for(let i = 0; i < series.data.values.length; i++)
-    {
-        series.data.labels[i] = daysOfWeek[i % 7];
-    }
-    series.colorEach = false
-    barChart.applyTheme("minimal")
-    series.format.fill = "blue"
-    series.format.gradient = false
-
+    donutChart.series.items[0].explode=[0,30,0,0,0];
+    series.rotation = -30
+    series.data.labels = ["Clothing", "Body Fit", "Sportswear"] 
+    donutChart.title.text = "Sales by category"
     series.marks.visible = false
-
-    const tooltip = new Tee.ToolTip(barChart)
+    const tooltip = new Tee.ToolTip(donutChart)
     tooltip.autoHide = true
     tooltip.delay = 1000
     tooltip.animated = 200
     tooltip.findPoint = true
 
-    barChart.tools.add(tooltip)
-    barChart.draw()
+    donutChart.tools.add(tooltip)
+    donutChart.applyTheme("minimal")
+
+    donutChart.legend.visible = true;
+    donutChart.legend.position = "right";
+    donutChart.legend.format.font.fill = "black";
+    donutChart.legend.format.font.size = 14;
+
+    donutChart.draw();
+  }
 }
-function drawArea() {
+
+
+async function drawLine() {
+  const response = await fetch('/api/data/getData', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  const chartData = await response.json();
+
+  const charts = ["line1", "line2","line3","line4"];
+  const labels = ["Total Revenue", "Total Visitors", "Total Transactions", "Total Products"]
+
+  for (let i = 0; i < charts.length; i++) {
+    const lineChartData = chartData.find(data => data.id === charts[i]);
+    if(lineChartData) {
+      const lineChart = new Tee.Chart(charts[i])
+      const series = new Tee.Line()
+      lineChart.addSeries(series)
+
+      series.data.values = JSON.parse(lineChartData.data)
+
+  
+      lineChart.legend.visible = false;
+      lineChart.axes.visible = false;
+      lineChart.applyTheme("minimal");
+      lineChart.title.text = labels[i%4];
+      lineChart.footer.format.font.fill = "black";
+      lineChart.title.format.size = 5;
+      series.format.stroke.fill = i === 2 ? "red" : "green";
+      lineChart.footer.text = i === 2 ? "-2% vs preview 28 days" : (i % 3 == 0 ? "3% vs preview 28 days" : "1% vs preview 28 days");
+
+      series.format.stroke.size = 2;
+      lineChart.draw();
+    }
+  }
+}
+
+
+async function loadData() {
+
+  let chartData = localStorage.getItem('chartData')
+
+  if(!chartData){
+    const response  = await fetch('api/data/getData', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    chartData= await response.json()
+    localStorage.setItem('chartData', JSON.stringify(chartData))
+  }
+  else{
+    chartData = JSON.parse(chartData)
+  }
+
+  const donutDataChart = {
+    id: 'donut',
+    type: 'donut',
+    data: JSON.stringify([25,35,40])
+  };
+
+  const lineDataChart1 = {
+    id: 'line1',
+    type: 'line',
+    data: JSON.stringify([738, 812, 712, 921, 604, 800, 1024, 1203, 1100])
+  };
+
+  const lineDataChart2 = {
+    id: 'line2',
+    type: 'line',
+    data: JSON.stringify([238, 612, 512, 221, 1004, 1220, 1524, 1003, 1100])
+  };
+
+  const lineDataChart3 = {
+    id: 'line3',
+    type: 'line',
+    data: JSON.stringify([2042,1994,1801,1730,1601,1498,1339,1245,1004])
+  };
+
+  const lineDataChart4 = {
+    id: 'line4',
+    type: 'line',
+    data: JSON.stringify([100,79,78,27,106,115,94,93,99])
+  };
+
+  const areaChartData = {
+    id: 'area',
+    type: 'area',
+    data: JSON.stringify([4562, 2562, 1262, 1000])
+  };
+
+  const barChartData = {
+    id: 'bar',
+    type: 'bar',
+    data: JSON.stringify([205, 190, 195, 380, 300, 105, 100]) 
+  };
+
+  try {
+    await fetch('/api/data/insertData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(barChartData)
+    });
+    await fetch('/api/data/insertData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(areaChartData)
+    });
+
+    await fetch('/api/data/insertData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(lineDataChart1)
+    });
+    await fetch('/api/data/insertData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(lineDataChart2)
+    });
+    await fetch('/api/data/insertData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(lineDataChart3)
+    });
+    await fetch('/api/data/insertData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(lineDataChart4)
+    });
+    await fetch('/api/data/insertData', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(donutDataChart)
+  });
+    
+    
+  } catch (error) {
+    console.error('Error inserting chart data:', error);
+  }
+}
+
+
+async function draw() {
+    const response = await fetch('/api/data/getData', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
+    const chartData = await response.json()
+
+    const barChartData = chartData.find(data => data.type === 'bar')
+    if(barChartData) {
+      const barChart = new Tee.Chart("bar")
+      const series = new Tee.Bar()
+      barChart.addSeries(series)
+      series.data.values = JSON.parse(barChartData.data)
+
+      const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+      barChart.title.text = "Total Sales"
+      barChart.title.format.fill = "black"
+      barChart.title.format.align = "left"
+      barChart.title.format.size = 20
+      barChart.legend.visible = false
+      for(let i = 0; i < series.data.values.length; i++) {
+          series.data.labels[i] = daysOfWeek[i % 7];
+      }
+      series.colorEach = false
+      barChart.applyTheme("minimal")
+      series.format.fill = "blue"
+      series.format.gradient = false
+
+      series.marks.visible = false
+
+      const tooltip = new Tee.ToolTip(barChart)
+      tooltip.autoHide = true
+      tooltip.delay = 1000
+      tooltip.animated = 200
+      tooltip.findPoint = true
+
+      barChart.tools.add(tooltip)
+      barChart.draw()
+    }
+}
+
+async function drawArea() {
+  const response = await fetch('/api/data/getData', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    
+    const chartData = await response.json()
+    const areaChartData = chartData.find(data => data.type === 'area')
+
+    if(areaChartData){
+
     const areaChart = new Tee.Chart("area")
     const series = new Tee.Area()
     areaChart.addSeries(series)
 
-    series.data.values = [4562, 2562, 1262, 1000]
+    series.data.values = JSON.parse(areaChartData.data)
     areaChart.title.text = "Sales Funnel"
     areaChart.title.format.fill = "black"
     areaChart.title.format.align = "left"
@@ -143,6 +309,8 @@ function drawArea() {
     series.smooth = true
 
     areaChart.draw()
+    }
+  
 }
 
 	</script>
