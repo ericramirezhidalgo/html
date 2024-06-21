@@ -1,16 +1,8 @@
 ---
-import { db, User } from 'astro:db';
-
-const users = await db.select().from(User);
+import Layout from '../layouts/Layout.astro';
 ---
-
-<h2>Users</h2>
-
-{
- users.map(({ username, mail }) => (
-    <article>
-      <p>Username: {username}</p>
-      <p>Mail: {mail}</p>
-    </article>
-  ))
-}
+<Layout title="Index">
+	<main class="min-h-screen">
+     <h1 class="text-3xl text-white font-bold text-center m-10">Welcome</h1>
+	</main>
+</Layout>
