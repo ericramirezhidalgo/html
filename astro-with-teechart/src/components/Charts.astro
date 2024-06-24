@@ -74,6 +74,60 @@
     }
   }
 
+  async function loadData() {
+    const data = [
+      { id: "donut", type: "donut", data: JSON.stringify([25, 35, 40]) },
+      {
+        id: "line1",
+        type: "line",
+        data: JSON.stringify([738, 812, 712, 921, 604, 800, 1024, 1203, 1100]),
+      },
+      {
+        id: "line2",
+        type: "line",
+        data: JSON.stringify([
+          238, 612, 512, 221, 1004, 1220, 1524, 1003, 1100,
+        ]),
+      },
+      {
+        id: "line3",
+        type: "line",
+        data: JSON.stringify([
+          2042, 1994, 1801, 1730, 1601, 1498, 1339, 1245, 1004,
+        ]),
+      },
+      {
+        id: "line4",
+        type: "line",
+        data: JSON.stringify([100, 79, 78, 27, 106, 115, 94, 93, 99]),
+      },
+      {
+        id: "area",
+        type: "area",
+        data: JSON.stringify([4562, 2562, 1262, 1000]),
+      },
+      {
+        id: "bar",
+        type: "bar",
+        data: JSON.stringify([205, 190, 195, 380, 300, 105, 100]),
+      },
+    ];
+
+    try {
+      for (let chart of data) {
+        await fetch("/api/data/insertData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(chart),
+        });
+      }
+    } catch (error) {
+      console.error("Error inserting chart data:", error);
+    }
+  }
+
   async function drawDonut(chartData) {
     const donutChartData = chartData.find((data) => data.id === "donut");
     if (donutChartData) {
@@ -198,7 +252,11 @@
   }
 
   async function initializePage() {
-    const chartData = await fetchData("/api/data/getData");
+    let chartData = await fetchData("/api/data/getData");
+    if (!chartData || chartData.length === 0) {
+      await loadData();
+      chartData = await fetchData("/api/data/getData");
+    }
     if (chartData) {
       draw();
       drawArea(chartData);
