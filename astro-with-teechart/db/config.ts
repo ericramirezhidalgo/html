@@ -45,7 +45,7 @@ const UserTable = defineTable({
 
 
 const db = defineDb({
-  tables: { User: UserTable, ChartData:ChartDataTable }
+  tables: { User: UserTable, ChartData: ChartDataTable }
 }) as MyDatabase;
 
 export default db;

@@ -1,13 +1,14 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import LoginContainer from '../components/LoginContainer.astro';
+import Layout from "../layouts/Layout.astro";
+import LoginContainer from "../components/LoginContainer.astro";
 ---
+
 <Layout title="Login">
-	<main class="min-h-screen">
+    <main class="min-h-screen">
         <svg>
-            <slot name="steema-logo"></slot>
+            <slot name="steema-logo" />
         </svg>
-        <slot name="welcome-message"></slot>
-		<LoginContainer />
-	</main>
+        <slot name="welcome-message" />
+        <LoginContainer />
+    </main>
 </Layout>
