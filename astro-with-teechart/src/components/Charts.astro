@@ -1,4 +1,4 @@
-<body onload="initializePage()"></body>
+<body onload="initializePage(),modal()"></body>
 <div class="flex justify-center">
   <div
     class="bg-gray-100 mt-28 ml-10 pt-2 p-5 mb-10 h-auto w-1/2 rounded-md flex flex-wrap justify-around"
@@ -53,6 +53,65 @@
   type="text/javascript"></script>
 
 <script type="text/javascript">
+  async function modal() {
+    const settingsButton = document.querySelector(".btn-settings");
+    const settingsModal = document.getElementById("settings-modal");
+    const closeModalButton = document.querySelector(".btn-close-modal");
+    const saveDataButton = document.querySelector(".btn-save-data");
+
+    settingsButton.addEventListener("click", () => {
+      console.log("Settings button clicked");
+      settingsModal.classList.remove("hidden");
+    });
+
+    closeModalButton.addEventListener("click", () => {
+      settingsModal.classList.add("hidden");
+    });
+    const chartTypes = {
+      bar: "bar",
+      donut: "donut",
+      line1: "line1",
+      line2: "line2",
+      line3: "line3",
+      line4: "line4",
+      area: "area",
+    };
+
+    saveDataButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const id = document.getElementById("id").value;
+      const type = chartTypes[id];
+      let data = document.getElementById("data").value;
+
+      try {
+        data = JSON.parse(data);
+      } catch (e) {
+        console.error("Data is not a valid JSON array");
+        return;
+      }
+
+      const chartData = { id, type, data };
+
+      const response = await fetch("/api/data/updateData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(chartData),
+      });
+
+      if (response.ok) {
+        console.log("Chart data updated");
+        await initializePage();
+      } else {
+        console.error("Error updating chart data");
+      }
+
+      settingsModal.classList.add("hidden");
+    });
+  }
+
   async function fetchData(url) {
     try {
       const response = await fetch(url, {
@@ -186,15 +245,14 @@
     }
   }
 
-  async function draw() {
-    const chartData = await fetchData("/api/data/getData");
-    if (!chartData) return;
+  async function draw(chartData) {
     const barChartData = chartData.find((data) => data.type === "bar");
     if (barChartData) {
       const barChart = new Tee.Chart("bar");
       const series = new Tee.Bar();
       barChart.addSeries(series);
       series.data.values = JSON.parse(barChartData.data);
+      console.log(series.data.values);
       const daysOfWeek = [
         "Monday",
         "Tuesday",
@@ -255,7 +313,7 @@
       chartData = await fetchData("/api/data/getData");
     }
     if (chartData) {
-      draw();
+      draw(chartData);
       drawArea(chartData);
       drawLine(chartData);
       drawDonut(chartData);
