@@ -1,5 +1,5 @@
 import { db, User, eq } from 'astro:db';
-import type {APIRoute} from 'astro';
+import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async function post({ request }) {
   if (!request.body) {
@@ -8,7 +8,7 @@ export const POST: APIRoute = async function post({ request }) {
   }
   try {
     console.log('Request body:', request.body);
-    let { mail, password } = await request.json();
+    const { mail, password } = await request.json();
     console.log('Parsed email and password:', mail, password);
 
     const users = await db.select().from(User).where(u => eq(u.mail, mail));
