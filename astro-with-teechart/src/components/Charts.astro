@@ -59,14 +59,6 @@
     const closeModalButton = document.querySelector(".btn-close-modal");
     const saveDataButton = document.querySelector(".btn-save-data");
 
-    settingsButton.addEventListener("click", () => {
-      console.log("Settings button clicked");
-      settingsModal.classList.remove("hidden");
-    });
-
-    closeModalButton.addEventListener("click", () => {
-      settingsModal.classList.add("hidden");
-    });
     const chartTypes = {
       bar: "bar",
       donut: "donut",
@@ -76,6 +68,24 @@
       line4: "line4",
       area: "area",
     };
+
+    const chartSelect = document.getElementById("id");
+
+    Object.keys(chartTypes).forEach((key) => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+      chartSelect.appendChild(option);
+    });
+
+    settingsButton.addEventListener("click", () => {
+      console.log("Settings button clicked");
+      settingsModal.classList.remove("hidden");
+    });
+
+    closeModalButton.addEventListener("click", () => {
+      settingsModal.classList.add("hidden");
+    });
 
     saveDataButton.addEventListener("click", async (event) => {
       event.preventDefault();
