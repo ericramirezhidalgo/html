@@ -10,7 +10,7 @@ export default defineConfig({
     // Rutas de las funciones de la API
     api: './src/pages/api'
   },
-  output: 'static' // o 'hybrid'
+  output: 'server' // o 'hybrid'
   ,
   adapter: vercel()
 });
