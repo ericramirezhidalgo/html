@@ -15,7 +15,7 @@ confirmButton.addEventListener('click', async () => {
   const dateOfBirth = new Date(dateOfBirthInput);
   const dateOfBirthString = dateOfBirth.toISOString().slice(0, 10);
   const planType = document.getElementById("inputPlanType").value;
-  const gender = document.getElementById("inputGender").value;
+  const gender = document.getElementById("inputGender").value
 
   const userObj = {
     username: userName,
