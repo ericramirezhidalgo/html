@@ -1,0 +1,7 @@
+hello
+mouse
+keyboard
+screen
+calendar
+phone
+key
