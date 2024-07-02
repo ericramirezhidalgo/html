@@ -1,22 +1,20 @@
 ---
-// src/pages/pokemon/index.astro
 import Layout from "../../layouts/Layout.astro";
 import PokeCard from "../../components/PokeCard.astro";
 import Pages from "../../components/Page.astro";
-import fetchPokemon from "../../../api/getPokemon.mts";
 import type { listPokemon, pokemon } from "../../../interface/interface";
 
-const { page } = Astro.params;
-const limit = 50;
-const offset = (Number(page) - 1) * limit;
-
-export function getStaticPaths() {
+export async function getStaticPaths() {
     const paths = [];
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 30; i++) {
         paths.push({ params: { page: i.toString() } });
     }
     return paths;
 }
+
+const { page } = Astro.params;
+const limit = 50;
+const offset = (Number(page) - 1) * limit;
 
 const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
@@ -34,11 +32,13 @@ const detailedPokemonList: pokemon[] = await Promise.all(
 <main class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-9">
     {
         detailedPokemonList.map((pokemon: pokemon) => (
-            <PokeCard
-                name={pokemon.name}
-                sprite={pokemon.sprites.front_default}
-                id={pokemon.id}
-            />
+            <a href={`/info/${pokemon.id}`}>
+                <PokeCard
+                    name={pokemon.name}
+                    sprite={pokemon.sprites.front_default}
+                    id={pokemon.id}
+                />
+            </a>
         ))
     }
     <Pages />

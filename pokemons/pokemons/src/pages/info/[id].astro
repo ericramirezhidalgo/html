@@ -1,0 +1,33 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PokeInfo from "../../components/PokeInfo.astro";
+import type { listPokemon, pokemon } from "../../../interface/interface";
+
+export async function getStaticPaths() {
+    const paths: { params: { id: string } }[] = [];
+    for (let i = 1; i <= 10500; i++) {
+        paths.push({ params: { id: i.toString() } });
+    }
+    return paths;
+}
+
+const { id } = Astro.params;
+
+const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+const pokemonData: pokemon = await response.json();
+---
+
+<Layout title="Pokemon Info" />
+<main class="m-10 p-5">
+    <PokeInfo
+        name={pokemonData.name}
+        frontSprite={pokemonData.sprites.front_default}
+        backSprite={pokemonData.sprites.back_default}
+        id={pokemonData.id}
+        abilities={pokemonData.abilities.map((a) => a.ability.name).join(", ")}
+        type={pokemonData.types.map((t) => t.type.name).join(", ")}
+        stats={pokemonData.stats
+            .map((s) => `${s.stat.name}: ${s.base_stat}`)
+            .join(", ")}
+    />
+</main>
