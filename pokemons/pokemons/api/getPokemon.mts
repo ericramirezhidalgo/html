@@ -195,27 +195,23 @@ data.types?.map(repo => {
     }
 })
 
-export async function getAllPokemonData(): Promise<PokemonInfo[]> {
+export async function getAllPokemonData(limit: number, offset: number): Promise<PokemonInfo[]> {
     const allPokemonData: PokemonInfo[] = [];
-    for (let id = 1; id <= 50; id++) {
-        const response = await fetch(`${API_URL}${id}`);
-        if (!response.ok) {
+    const response = await fetch(`${API_URL}?limit=${limit}&offset=${offset}`);
+    if (!response.ok) {
+        throw new Error("Request failed");
+    }
+    const data = await response.json();
+    for (let pokemon of data.results) {
+        const pokemonResponse = await fetch(pokemon.url);
+        if (!pokemonResponse.ok) {
             throw new Error("Request failed");
         }
-        const data = await response.json() as PokemonInfo;
-        allPokemonData.push(data);
+        const pokemonData = await pokemonResponse.json() as PokemonInfo;
+        allPokemonData.push(pokemonData);
     }
     return allPokemonData;
 }
 
 
-export async function getPokemonDescription(id: number): Promise<string> {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
-    if (!response.ok) {
-        throw new Error("Request failed");
-    }
-    const data = await response.json();
-    const flavorTextEntries = data.flavor_text_entries;
-    const englishFlavorText = flavorTextEntries.find((entry: any) => entry.language.name === 'en');
-    return englishFlavorText ? englishFlavorText.flavor_text : '';
-}
+

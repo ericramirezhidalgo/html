@@ -1,0 +1,51 @@
+---
+import {
+    type PokemonInfo,
+    getAllPokemonData,
+} from "../../../api/getPokemon.mjs";
+import Layout from "../../layouts/Layout.astro";
+import PokeCard from "../../components/PokeCard.astro";
+import Pages from "../../components/Page.astro";
+
+const { page } = Astro.params;
+const limit = 50;
+const offset = (Number(page) - 1) * limit;
+const pokemonData = await getAllPokemonData(limit, offset);
+
+export function getStaticPaths() {
+    const paths = [];
+    for (let i = 1; i <= 20; i++) {
+        paths.push({ params: { page: i.toString() } });
+    }
+    return paths;
+}
+---
+
+<Layout title="Pokemon" />
+<main class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-10">
+    {
+        pokemonData.map((pokemon: PokemonInfo) => {
+            if (
+                pokemon.id &&
+                pokemon.name &&
+                pokemon.types &&
+                pokemon.sprites &&
+                pokemon.sprites.front_default
+            ) {
+                return (
+                    <div class="w-full max-w-xs mx-auto">
+                        <PokeCard
+                            title={pokemon.name}
+                            name={pokemon.name}
+                            sprite={pokemon.sprites.front_default}
+                        />
+                    </div>
+                );
+            } else {
+                return null;
+            }
+        })
+    }
+
+    <Pages />
+</main>

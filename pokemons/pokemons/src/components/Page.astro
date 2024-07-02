@@ -1,0 +1,28 @@
+---
+const { page } = Astro.params;
+---
+
+<div class="flex justify-center items-center p-5 mx-auto ml-10 m-5 mb-4">
+    {
+        Number(page) > 1 && (
+            <div class="flex rounded-lg w-full flex-col  ml-10 m-5 mb-4 p-5 bg-slate-900 border-2 border-white">
+                <a
+                    href={`/pokemons/${Number(page) - 1}`}
+                    class="font-semibold text-center text-yellow-600 hover:font-black w-32"
+                >
+                    Previous page
+                </a>
+            </div>
+        )
+    }
+    <div
+        class="flex rounded-lg w-full flex-col ml-10 p-5 mx-auto m-5 mb-4 p-5 bg-slate-900 border-2 border-white"
+    >
+        <a
+            href={`/pokemons/${Number(page) + 1}`}
+            class="font-semibold text-center text-yellow-600 hover:font-black w-32"
+        >
+            Next page
+        </a>
+    </div>
+</div>
