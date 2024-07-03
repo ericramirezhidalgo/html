@@ -2,10 +2,12 @@
 interface Props {
     name: string;
     sprite: string;
+    id: number;
 }
 
-const { name, sprite } = Astro.props;
+const { name, sprite, id } = Astro.props;
 const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+const paddedId = id.toString().padStart(3, "0");
 ---
 
 <div class="grid h-fit w-auto mx-auto rounded-lg flex flex-col m-1 p-1">
@@ -13,11 +15,13 @@ const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
         <div
             class="w-auto h-auto text-gray-800 rounded-lg border-2 p-3 border-yellow-500 flex flex-col items-center bg-blue-700"
         >
-            <h2
-                class="bg-yellow-300 rounded-lg w-full text-center p-1 text-lg m-1 text-black font-semibold"
+            <p
+                class="bg-yellow-300 rounded-md w-full text-center p-1 m-1 text-xs border-2 border-black text-black font-semibold"
             >
-                {capitalizedName}
-            </h2>
+                {capitalizedName}<br />
+                #{paddedId}
+            </p>
+
             <img src={sprite} class="w-32" alt={capitalizedName} />
         </div>
     </div>
