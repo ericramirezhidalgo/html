@@ -19,6 +19,12 @@ for (let i = 0; i < data.length; i++) {
 </div>
 <img hidden id="sprites" src="/public/images/sprite.png" alt="Paddle" />
 <img hidden id="bricks" src="/public/images/bricks.png" alt="Bricks" />
+<img
+    hidden
+    id="ballSprite"
+    src="/public/images/Ball_Blue_Glass-32x32.png"
+    alt="Ball"
+/>
 
 <script>
     window.addEventListener("DOMContentLoaded", (event) => {
@@ -31,6 +37,9 @@ for (let i = 0; i < data.length; i++) {
             ) as CanvasImageSource;
             const $bricks = document.querySelector(
                 "#bricks",
+            ) as CanvasImageSource;
+            const $ballSprite = document.querySelector(
+                "#ballSprite",
             ) as CanvasImageSource;
             canvas.width = 448;
             canvas.height = 400;
@@ -92,11 +101,13 @@ for (let i = 0; i < data.length; i++) {
 
             function drawBall() {
                 if (ctx) {
-                    ctx.beginPath();
-                    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-                    ctx.fillStyle = "#fff";
-                    ctx.fill();
-                    ctx.closePath();
+                    ctx.drawImage(
+                        $ballSprite,
+                        x - ballRadius,
+                        y - ballRadius,
+                        ballRadius * 2,
+                        ballRadius * 2,
+                    );
                 }
             }
 
