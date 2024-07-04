@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Card from "../../components/Card.astro";
+import CanvasTeechart from "../../components/CanvasTeechart.astro";
+---
+
+<Layout title="Canvas Teechart">
+	<main>
+		<CanvasTeechart id="bar" data={["1", "2", "3"]} />
+	</main>
+</Layout>
