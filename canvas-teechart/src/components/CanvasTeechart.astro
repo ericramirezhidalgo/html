@@ -52,11 +52,11 @@ for (let i = 0; i < data.length; i++) {
 
             const brickRowCount = 6;
             const brickColumnCount = 13;
-            const brickWidth = 30;
-            const brickHeight = 14;
+            const brickWidth = 32;
+            const brickHeight = 16;
             const brickPadding = 0;
-            const brickOffsetTop = 85;
-            const brickOffsetLeft = 35;
+            const brickOffsetTop = 80;
+            const brickOffsetLeft = 16;
             const bricks: {
                 x: number;
                 y: number;
@@ -128,12 +128,12 @@ for (let i = 0; i < data.length; i++) {
                                 $bricks,
                                 clipX,
                                 0,
-                                brickHeight,
-                                brickWidth,
+                                31,
+                                14,
                                 currentBrick.x,
                                 currentBrick.y,
-                                brickHeight,
                                 brickWidth,
+                                brickHeight,
                             );
                         }
                     }
