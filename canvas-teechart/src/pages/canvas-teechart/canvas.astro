@@ -1,0 +1,49 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CanvasTeechart from "../../components/CanvasTeechart.astro";
+---
+
+<Layout title="Canvas Teechart">
+    <main class="flex justify-center">
+        <div class="grid grid-cols-3 items-center w-fit">
+            <CanvasTeechart
+                id="lineChart"
+                title="Total Sales"
+                width="340"
+                height="340"
+            />
+            <CanvasTeechart
+                id="bar"
+                data={[321, 13, 4, 150, 9, 29, 152]}
+                title="Movies per day"
+                width="600"
+                height="400"
+                labels={[
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                ]}
+            />
+            <CanvasTeechart
+                id="bar2"
+                data={[521, 213, 12, 220, 52, 91, 332]}
+                title="Total Revenue"
+                width="600"
+                height="400"
+                labels={[
+                    "Dairy section",
+                    "Meat department",
+                    "Seafood counter",
+                    "Paper products aisle",
+                    "Baking aisle",
+                    "Pharmacy",
+                    "Health and beauty department",
+                ]}
+            />
+        </div>
+    </main>
+</Layout>
