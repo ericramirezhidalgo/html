@@ -1,14 +1,14 @@
 ---
-interface Props {
-    id: string;
-    data: string[];
-}
-const { id, data } = Astro.props;
-let dataItems = "";
-for (let i = 0; i < data.length; i++) {
-    dataItems += `${data[i]}`;
-}
+
 ---
+
+<p
+    id="points"
+    class="justify-center p-2 m-2 mx-auto w-fit rounded-md border-2 font-mono border-yellow-400 bg-blue-800 text-yellow-300
+font-bold text-sx"
+>
+    POINTS:
+</p>
 
 <div class="justify-center w-auto p-2 m-2 items-center">
     <canvas
@@ -17,6 +17,7 @@ for (let i = 0; i < data.length; i++) {
     >
     </canvas>
 </div>
+
 <img hidden id="sprites" src="/public/images/sprite.png" alt="Paddle" />
 <img hidden id="bricks" src="/public/images/bricks.png" alt="Bricks" />
 <img
@@ -32,6 +33,9 @@ for (let i = 0; i < data.length; i++) {
         if (canvas) {
             const ctx = canvas.getContext("2d");
 
+            let totalPoints = 0;
+
+            let $points = document.querySelector("#points");
             const $sprite = document.querySelector(
                 "#sprites",
             ) as CanvasImageSource;
@@ -166,6 +170,11 @@ for (let i = 0; i < data.length; i++) {
                             if (isBallSameXAsBrick && isBallSameYAsBrick) {
                                 dy = -dy;
                                 currentBrick.status = BRICK_STATUS.DESTROYED;
+                                let newPoints = points(1);
+                                if ($points) {
+                                    $points.textContent =
+                                        "POINTS: " + newPoints;
+                                }
                             }
                         }
                     }
@@ -218,7 +227,10 @@ for (let i = 0; i < data.length; i++) {
                     leftPressed = false;
                 }
             }
-
+            function points(points: number) {
+                totalPoints += points;
+                return totalPoints;
+            }
             function initEvents() {
                 document.addEventListener("keydown", keyDownHandler);
                 document.addEventListener("keyup", keyUpHandler);
