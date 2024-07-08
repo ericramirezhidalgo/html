@@ -80,6 +80,57 @@ const { data, title, id, width, height, labels } = Astro.props;
                     lineChart.draw();
                 }
             }
+            function drawDonut() {
+                const bars = document.querySelectorAll("canvas[id^='donut']");
+                bars.forEach((bar) => {
+                    const dataValues = bar.getAttribute("data-values");
+                    const title = bar.getAttribute("title-values");
+                    const id = bar.getAttribute("id-values");
+
+                    const labelsValues = bar.getAttribute("labels-values");
+                    if (labelsValues !== null) {
+                        const labels = JSON.parse(labelsValues);
+                        if (dataValues) {
+                            if (id != null) {
+                                const donutChart = new Tee.Chart(id);
+                                const donutSeries = new Tee.Donut();
+                                donutSeries.format.stoke = 3;
+                                donutSeries.data.values =
+                                    JSON.parse(dataValues);
+                                donutChart.addSeries(donutSeries);
+                                donutChart.series.items[0].explode = [
+                                    0, 30, 0, 0, 0,
+                                ];
+                                donutSeries.rotation = -30;
+                                donutChart.title.text = `${title}`;
+                                donutSeries.marks.visible = false;
+                                donutChart.legend.visible = true;
+                                for (
+                                    let i = 0;
+                                    i < donutSeries.data.values.length;
+                                    i++
+                                ) {
+                                    donutSeries.data.labels[i] =
+                                        labels[i % labels.length];
+                                }
+                                const tooltip = new Tee.ToolTip(donutChart);
+
+                                tooltip.autoHide = true;
+                                tooltip.delay = 1000;
+                                tooltip.animated = 200;
+                                tooltip.findPoint = true;
+                                donutChart.tools.add(tooltip);
+                                donutChart.applyTheme("minimal");
+                                donutChart.legend.visible = true;
+                                donutChart.legend.position = "right";
+                                donutChart.legend.format.font.fill = "black";
+                                donutChart.legend.format.font.size = 14;
+                                donutChart.draw();
+                            }
+                        }
+                    }
+                });
+            }
 
             function draw() {
                 const bars = document.querySelectorAll("canvas[id^='bar']");
@@ -90,7 +141,7 @@ const { data, title, id, width, height, labels } = Astro.props;
 
                     const labelsValues = bar.getAttribute("labels-values");
                     if (labelsValues !== null) {
-                        if (labelsValues !== null) {
+                        {
                             const labels = JSON.parse(labelsValues);
                             if (dataValues) {
                                 if (id != null) {
@@ -136,6 +187,7 @@ const { data, title, id, width, height, labels } = Astro.props;
 
             draw();
             drawLine(chartData);
+            drawDonut();
         });
     </script>
 </body>
