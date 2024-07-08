@@ -52,6 +52,8 @@ const { data, title, id, width, height, labels } = Astro.props;
                 { id: "line4", data: [100, 79, 78, 27, 106, 115, 94, 93, 99] },
             ];
 
+            const areaCharts = [];
+
             function drawChart(
                 selector: string,
                 seriesClass: new () => any,
@@ -88,6 +90,10 @@ const { data, title, id, width, height, labels } = Astro.props;
                         if (customConfig) customConfig(chart, series);
 
                         chart.draw();
+
+                        if (selector === "canvas[id^='area']") {
+                            areaCharts.push(series);
+                        }
                     }
                 });
             }
@@ -154,6 +160,13 @@ const { data, title, id, width, height, labels } = Astro.props;
             });
 
             drawLine(chartData);
+
+            document.body.addEventListener("mousedown", () => {
+                areaCharts.forEach((series) => {
+                    series.smooth = !series.smooth;
+                    series.chart.draw();
+                });
+            });
         });
     </script>
 </body>
