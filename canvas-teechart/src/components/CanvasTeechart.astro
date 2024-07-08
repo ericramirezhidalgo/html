@@ -80,6 +80,31 @@ const { data, title, id, width, height, labels } = Astro.props;
                     lineChart.draw();
                 }
             }
+            function drawArea() {
+                const areas = document.querySelectorAll("canvas[id^='area']");
+                areas.forEach((area) => {
+                    const dataValues = area.getAttribute("data-values");
+                    const title = area.getAttribute("title-values");
+                    const id = area.getAttribute("id-values");
+
+                    if (dataValues) {
+                        if (id != null) {
+                            const areaChart = new Tee.Chart(id);
+                            const areaSeries = new Tee.Area();
+                            areaSeries.format.stoke = 3;
+                            areaSeries.data.values = JSON.parse(dataValues);
+                            areaChart.addSeries(areaSeries);
+                            areaChart.title.text = `${title}`;
+
+                            areaChart.applyTheme("minimal");
+                            areaSeries.format.fill = "blue";
+                            areaSeries.smooth = true;
+
+                            areaChart.draw();
+                        }
+                    }
+                });
+            }
             function drawDonut() {
                 const bars = document.querySelectorAll("canvas[id^='donut']");
                 bars.forEach((bar) => {
@@ -188,6 +213,7 @@ const { data, title, id, width, height, labels } = Astro.props;
             draw();
             drawLine(chartData);
             drawDonut();
+            drawArea();
         });
     </script>
 </body>
