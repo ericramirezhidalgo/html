@@ -31,11 +31,10 @@ const { data, title, id, width, height, labels } = Astro.props;
     <script
         src="https://www.steema.com/files/public/teechart/html5/latest/src/teechart.js"
         type="text/javascript"></script>
-
     <script>
         declare var Tee: any;
         window.addEventListener("DOMContentLoaded", (event) => {
-            const chartData = [
+            const chartData: { id: string; data: number[] }[] = [
                 {
                     id: "line1",
                     data: [738, 812, 712, 921, 604, 800, 1024, 1203, 1100],
@@ -50,26 +49,63 @@ const { data, title, id, width, height, labels } = Astro.props;
                         2042, 1994, 1801, 1730, 1601, 1498, 1339, 1245, 1004,
                     ],
                 },
-                {
-                    id: "line4",
-                    data: [100, 79, 78, 27, 106, 115, 94, 93, 99],
-                },
+                { id: "line4", data: [100, 79, 78, 27, 106, 115, 94, 93, 99] },
             ];
 
+            function drawChart(
+                selector: string,
+                seriesClass: new () => any,
+                customConfig: (chart: any, series: any) => void,
+            ) {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach((el) => {
+                    const dataValues = el.getAttribute("data-values");
+                    const title = el.getAttribute("title-values");
+                    const id = el.getAttribute("id-values");
+                    const labelsValues = el.getAttribute("labels-values");
+
+                    if (dataValues && id) {
+                        const chart = new Tee.Chart(id);
+                        const series = new seriesClass();
+                        series.data.values = JSON.parse(dataValues);
+                        chart.addSeries(series);
+                        chart.title.text = title || "";
+
+                        chart.applyTheme("minimal");
+
+                        if (labelsValues) {
+                            const labels = JSON.parse(labelsValues);
+                            for (
+                                let i = 0;
+                                i < series.data.values.length;
+                                i++
+                            ) {
+                                series.data.labels[i] =
+                                    labels[i % labels.length];
+                            }
+                        }
+
+                        if (customConfig) customConfig(chart, series);
+
+                        chart.draw();
+                    }
+                });
+            }
+
             function drawLine(chartData: { id: string; data: number[] }[]) {
-                const canvas = document.getElementById("lineChart");
+                const canvas = document.getElementById(
+                    "lineChart",
+                ) as HTMLCanvasElement;
                 if (canvas) {
                     const lineChart = new Tee.Chart("lineChart");
-
-                    for (let i = 0; i < chartData.length; i++) {
+                    chartData.forEach((line, i) => {
                         const lineSeries = new Tee.Line();
                         lineSeries.format.stroke.size = 3;
-                        lineSeries.data.values = chartData[i].data;
+                        lineSeries.data.values = line.data;
                         lineSeries.format.stroke.fill =
                             i === 2 ? "red" : "green";
                         lineChart.addSeries(lineSeries);
-                    }
-
+                    });
                     lineChart.legend.visible = false;
                     lineChart.axes.visible = false;
                     lineChart.applyTheme("minimal");
@@ -80,140 +116,44 @@ const { data, title, id, width, height, labels } = Astro.props;
                     lineChart.draw();
                 }
             }
-            function drawArea() {
-                const areas = document.querySelectorAll("canvas[id^='area']");
-                areas.forEach((area) => {
-                    const dataValues = area.getAttribute("data-values");
-                    const title = area.getAttribute("title-values");
-                    const id = area.getAttribute("id-values");
 
-                    if (dataValues) {
-                        if (id != null) {
-                            const areaChart = new Tee.Chart(id);
-                            const areaSeries = new Tee.Area();
-                            areaSeries.format.stoke = 3;
-                            areaSeries.data.values = JSON.parse(dataValues);
-                            areaChart.addSeries(areaSeries);
-                            areaChart.title.text = `${title}`;
+            drawChart("canvas[id^='area']", Tee.Area, (chart, series) => {
+                series.format.fill = "blue";
+                series.smooth = true;
+            });
 
-                            areaChart.applyTheme("minimal");
-                            areaSeries.format.fill = "blue";
-                            areaSeries.smooth = true;
+            drawChart("canvas[id^='donut']", Tee.Donut, (chart, series) => {
+                series.rotation = -30;
+                series.marks.visible = false;
+                chart.series.items[0].explode = [0, 30, 0, 0, 0];
+                chart.legend.visible = true;
+                chart.legend.position = "right";
+                chart.legend.format.font.fill = "black";
+                chart.legend.format.font.size = 14;
 
-                            areaChart.draw();
-                        }
-                    }
-                });
-            }
-            function drawDonut() {
-                const bars = document.querySelectorAll("canvas[id^='donut']");
-                bars.forEach((bar) => {
-                    const dataValues = bar.getAttribute("data-values");
-                    const title = bar.getAttribute("title-values");
-                    const id = bar.getAttribute("id-values");
+                const tooltip = new Tee.ToolTip(chart);
+                tooltip.autoHide = true;
+                tooltip.delay = 1000;
+                tooltip.animated = 200;
+                tooltip.findPoint = true;
+                chart.tools.add(tooltip);
+            });
 
-                    const labelsValues = bar.getAttribute("labels-values");
-                    if (labelsValues !== null) {
-                        const labels = JSON.parse(labelsValues);
-                        if (dataValues) {
-                            if (id != null) {
-                                const donutChart = new Tee.Chart(id);
-                                const donutSeries = new Tee.Donut();
-                                donutSeries.format.stoke = 3;
-                                donutSeries.data.values =
-                                    JSON.parse(dataValues);
-                                donutChart.addSeries(donutSeries);
-                                donutChart.series.items[0].explode = [
-                                    0, 30, 0, 0, 0,
-                                ];
-                                donutSeries.rotation = -30;
-                                donutChart.title.text = `${title}`;
-                                donutSeries.marks.visible = false;
-                                donutChart.legend.visible = true;
-                                for (
-                                    let i = 0;
-                                    i < donutSeries.data.values.length;
-                                    i++
-                                ) {
-                                    donutSeries.data.labels[i] =
-                                        labels[i % labels.length];
-                                }
-                                const tooltip = new Tee.ToolTip(donutChart);
+            drawChart("canvas[id^='bar']", Tee.Bar, (chart, series) => {
+                series.format.stroke.size = 3;
+                series.format.gradient = false;
+                series.marks.visible = false;
+                chart.legend.visible = false;
 
-                                tooltip.autoHide = true;
-                                tooltip.delay = 1000;
-                                tooltip.animated = 200;
-                                tooltip.findPoint = true;
-                                donutChart.tools.add(tooltip);
-                                donutChart.applyTheme("minimal");
-                                donutChart.legend.visible = true;
-                                donutChart.legend.position = "right";
-                                donutChart.legend.format.font.fill = "black";
-                                donutChart.legend.format.font.size = 14;
-                                donutChart.draw();
-                            }
-                        }
-                    }
-                });
-            }
+                const tooltip = new Tee.ToolTip(chart);
+                tooltip.autoHide = true;
+                tooltip.delay = 1000;
+                tooltip.animated = 200;
+                tooltip.findPoint = true;
+                chart.tools.add(tooltip);
+            });
 
-            function draw() {
-                const bars = document.querySelectorAll("canvas[id^='bar']");
-                bars.forEach((bar) => {
-                    const dataValues = bar.getAttribute("data-values");
-                    const title = bar.getAttribute("title-values");
-                    const id = bar.getAttribute("id-values");
-
-                    const labelsValues = bar.getAttribute("labels-values");
-                    if (labelsValues !== null) {
-                        {
-                            const labels = JSON.parse(labelsValues);
-                            if (dataValues) {
-                                if (id != null) {
-                                    const barChart = new Tee.Chart(id);
-                                    const barSeries = new Tee.Bar();
-                                    barSeries.format.stroke.size = 3;
-                                    barSeries.data.values =
-                                        JSON.parse(dataValues);
-                                    barChart.addSeries(barSeries);
-                                    barChart.title.text = `${title}`;
-                                    barChart.title.format.fill = "black";
-                                    barChart.title.format.align = "left";
-                                    barChart.title.format.size = 20;
-                                    barChart.legend.visible = false;
-                                    for (
-                                        let i = 0;
-                                        i < barSeries.data.values.length;
-                                        i++
-                                    ) {
-                                        barSeries.data.labels[i] =
-                                            labels[i % labels.length];
-                                    }
-                                    barSeries.colorEach = false;
-                                    barChart.applyTheme("minimal");
-                                    barSeries.format.fill = "blue";
-                                    barSeries.format.gradient = false;
-                                    barSeries.marks.visible = false;
-                                    const tooltip = new Tee.ToolTip(barChart);
-                                    tooltip.autoHide = true;
-                                    tooltip.delay = 1000;
-                                    tooltip.animated = 200;
-                                    tooltip.findPoint = true;
-                                    barChart.tools.add(tooltip);
-                                    barChart.draw();
-
-                                    barSeries.draw();
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            draw();
             drawLine(chartData);
-            drawDonut();
-            drawArea();
         });
     </script>
 </body>
