@@ -4,8 +4,8 @@ import CanvasTeechart from "../../components/CanvasTeechart.astro";
 ---
 
 <Layout title="Canvas Teechart">
-    <main>
-        <div class="grid grid-cols-3 items-start w-full">
+    <main class="flex justify-center">
+        <div class="grid grid-cols-3 items-start w-full p-2">
             <CanvasTeechart
                 id="lineChart"
                 title="Total Sales"
@@ -40,7 +40,7 @@ import CanvasTeechart from "../../components/CanvasTeechart.astro";
                 id="donutChart"
                 data={[100, 50, 95]}
                 title="Music"
-                width="400"
+                width="350"
                 height="400"
                 labels={["Pop", "Rock", "Jazz"]}
             />
