@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "astro": "^4.11.3"
+    "astro": "^4.11.3",
+    "three": "^0.167.1"
+  },
+  "devDependencies": {
+    "vite": "^5.3.5"
   }
 }
