@@ -1,0 +1,17 @@
+{
+  "link.title.Docs": {
+    "message": "Documentos"
+  },
+  "link.title.Community": {
+    "message": "Comunidad"
+  },
+  "link.title.More": {
+    "message": "Más"
+  },
+  "link.item.label.Getting Started": {
+    "message": "Empezando"
+  },
+  "link.item.label.Stack Overflow": {
+    "message": "Stack Overflow"
+  }
+}

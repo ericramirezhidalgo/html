@@ -1,0 +1,32 @@
+{
+  "Docusaurus Tutorial": {
+    "message": "Tutorial Docusaurus"
+  },
+  "Dinosaurs are cool": {
+    "message": "Los dinosaurios son geniales"
+  },
+  "Docusaurus was designed from the ground up to be easily installed and used to get your website up and running quickly.": {
+    "message": "Docusaurus fue diseñado desde cero para ser fácilmente instalado y utilizado para poner en marcha su sitio web rápidamente."
+  },
+  "Docusaurus lets you focus on your docs, and we'll do the chores. Go ahead and move your docs into the docs directory.": {
+    "message": "Docusaurus te permite centrarte en tus documentos, y nosotros nos encargamos de las tareas. Adelante, mueve tus documentos al directorio docs."
+  },
+  "Powered by React": {
+    "message": "Impulsado por React"
+  },
+  "Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.": {
+    "message": "Extender o personalizar el diseño de tu sitio web mediante la reutilización de React. Docusaurus se puede ampliar mientras reutiliza el mismo encabezado y pie de página."
+  },
+  "Easy to Use": {
+    "message": "Fácil de usar"
+  },
+  "Focus on What Matters": {
+    "message": "Centrado en lo importante"
+  },
+  "theme.NotFound.title": {
+    "message": "Página no encontrada"
+  },
+  " Docusaurus Tutorial - 5min ⏱️": {
+    "message": "Tutorial Docusaurios - 5min"
+  }
+}
