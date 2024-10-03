@@ -26,6 +26,9 @@
   "theme.NotFound.title": {
     "message": "Página no encontrada"
   },
+  "footer.links.docs.title": { "message": "Documentos" },
+  "footer.links.community.title": { "message": "Comunidad" },
+  "footer.links.more.title": { "message": "Más" },
   " Docusaurus Tutorial - 5min ⏱️": {
     "message": "Tutorial Docusaurios - 5min"
   }
